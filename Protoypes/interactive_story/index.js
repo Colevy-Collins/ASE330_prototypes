@@ -1,7 +1,7 @@
 const express = require('express');
 const ejs = require('ejs');
 const { OpenAI } = require('openai');
-const openai_key = require('/openaiApiKey.js')
+const openai_key = require('./openaiApiKey.js')
 
 const app = express();
 const port = 3000;
@@ -29,10 +29,11 @@ app.post('/gather-input', async (req, res) => {
         const response = await openai.chat.completions.create({
             model : "gpt-3.5-turbo",
             messages : [
-              {"role": "user", "content": "${userIput}"},
+              {"role": "user", "content": userInput},
             ]
     });
-        const responseData = response.completion.choices[0].message.content;
+        console.log(response)
+        const responseData = response.choices[0].message.content;
         res.send(responseData);
     } catch (error) {
         console.error('Error:', error);

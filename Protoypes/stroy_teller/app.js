@@ -25,7 +25,7 @@ const storyNodes = {
     goDifferentWay: new TreeNode("Sir Lancelot chooses to go around and over the mountain. He encounters a troll. Will he confront the troll?", 'confrontTroll', 'notConfrontTroll' ),
     notConfrontTroll: new TreeNode("Sir Lancelot chose not to confront the troll and go back. The end."),
     confrontTroll: new TreeNode("Sir Lancelot chose to confront the troll. He drops something. Pick it up?" , 'pickItUP', 'notPickItUp'),
-    pickItUP: new TreeNode("Sir Lancelot picks sit up. It was the Excalibur! Congratulations. The end."),
+    pickItUP: new TreeNode("Sir Lancelot picks it up. It was the Excalibur! Congratulations. The end."),
     notPickItUp: new TreeNode("Sir Lancelot does not pick it up. There's nothing else you can do. The end."),
     notConfrontDragon: new TreeNode("Sir Lancelot chooses not to confront the dragon. The end."),
     confrontDragon: new TreeNode("Sir Lancelot confronts the fearsome dragon. Will he succeed in retrieving Excalibur?", 'retrieveExcalibur', 'failRetrieveExcalibur'),

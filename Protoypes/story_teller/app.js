@@ -18,7 +18,7 @@ class TreeNode {
 const storyNodes = {
     start: new TreeNode("In a land of legends, you, Sir Lancelot, the valiant knight, awaken from a dream in your chamber. \n The soft morning light filters through stained glass windows, casting kaleidoscopic patterns on your chamber walls. You feel a stirring within, a calling to your quest - the search for the mythical Excalibur. Your journey begins in your room. The wise old wizard's prophecy lingers in your mind: Excalibur lies hidden in a mystical lake guarded by a dragon of immense power. Do you, Sir Lancelot, heed the call and continue your quest to find Excalibur?", 'continueQuest', 'endRejected'),
 
-    continueQuest: new TreeNode("You, Sir Lancelot, accept the wizard's guidance and resolve to continue your noble quest. With armor donned, you step into the world beyond your chamber, where adventure and danger await. The path unfolds before you like an untold story. Will you venture into the forest, where ancient secrets lie?", 'enterForest', 'endRejected'),
+    continueQuest: new TreeNode("You, Sir Lancelot, accept the wizard's guidance and resolve to continue your noble quest. With armor donned and sword in hand, you step into the world beyond your chamber, where adventure and danger await. The path unfolds before you like an untold story. Will you venture into the forest, where ancient secrets lie?", 'enterForest', 'endRejected'),
     
     endRejected: new TreeNode("You, Sir Lancelot, reject the wizard's guidance and choose to remain in your chamber. The dream of Excalibur fades away, and the world remains untouched by your valor. The End."),
     
@@ -27,12 +27,14 @@ const storyNodes = {
     pickUpBow: new TreeNode("With the bow in your hands, you continue your journey through the forest. As you venture deeper, the air grows thick with tension. The source of it all becomes clear as you stumble upon the mighty dragon, its scales glistening in the dappled sunlight. Do you take aim with your bow and shoot at the dragon, hoping to claim Excalibur?", "shootDragon", "notShootDragon"),
 
     shootDragon: new TreeNode("Sir Lancelot draws his bowstring, and with a steady hand, he releases an arrow towards the dragon. The arrow misses the mark, and the dragon lets out a thunderous roar. Do you try again and shoot at the dragon?", 'shootAgain', 'notShootAgain'),
+    
+    shootAgain: new TreeNode("With unwavering determination, Sir Lancelot notches another arrow and lets it fly. This time, the arrow finds its mark, striking the dragon. It roars in agony. Excalibur is now within sight. Will Sir Lancelot succeed in retrieving the legendary sword?", 'retrieveExcalibur', 'notReceiveExcalibur'),
 
-    shootAgain: new TreeNode("With unwavering determination, Sir Lancelot notches another arrow and lets it fly. This time, the arrow finds its mark, striking the dragon. It roars in agony. Excalibur is now within sight. Will Sir Lancelot succeed in retrieving the legendary sword?", 'retrieveExcalibur', 'failReceiveExcalibur'),
+    notShootAgain: new TreeNode("Sir Lancelot decides not to shoot another arrow at the dragon, choosing another path. As you hesitate, the dragon spots you and approaches. Do you attempt to run past the dragon?", 'runPast', 'notRunPast'),
 
     notShootDragon: new TreeNode("Sir Lancelot decides not to shoot another arrow at the dragon, choosing another path. As you turn away, the dragon pounces and devours you."),
 
-    failReceiveExcalibur: new TreeNode("Despite the dragon's injury, Sir Lancelot is unable to secure Excalibur. The quest remains unfulfilled."),
+    notReceiveExcalibur: new TreeNode("Despite the dragon's injury, Sir Lancelot is unable to secure Excalibur. The quest remains unfulfilled."),
 
     leaveBowBehind: new TreeNode("You choose not to pick up the bow and leave it behind. As you proceed deeper into the forest, you realize you have no weapon. The tension in the air grows, and you feel vulnerable. Do you continue deeper into the forest?", 'continueForest', 'notContinueForest'),
 

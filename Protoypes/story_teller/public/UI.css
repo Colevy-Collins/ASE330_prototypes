@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  background: linear-gradient(to bottom, #7ed9c3, #6ba6d8);
+  font-family: 'Poppins', sans-serif;
+}
+
+.container {
+  text-align: center;
+  border: 2px solid #d1d1d1;
+  padding: 20px;
+  border-radius: 15px;
+  background-color: #f9f9f9;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  max-width: 600px;
+  margin: 20px;
+}
+
+#prompt {
+  color: #333;
+  font-size: 24px;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  letter-spacing: 1px;
+  padding: 20px;
+  border: 2px solid #d1d1d1;
+  border-radius: 20px;
+  background-color: #f5f5f5;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  height: 300px;
+  overflow: auto;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+#yesButton, #noButton {
+  margin: 10px;
+  padding: 12px 24px;
+  font-size: 18px;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  color: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+#yesButton {
+  background: linear-gradient(to bottom, #5bd9c3, #3a7ed8); /* Green and blue gradient */
+}
+
+#noButton {
+  background: linear-gradient(to bottom, #3a7ed8, #5bd9c3); /* Blue and green gradient */
+}
+
+#yesButton:hover, #noButton:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+}
+
+#yesButton:active, #noButton:active {
+  transform: scale(0.95);
+  box-shadow: none;
+}

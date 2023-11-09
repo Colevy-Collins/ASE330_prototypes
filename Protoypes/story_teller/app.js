@@ -18,7 +18,7 @@ class TreeNode {
 const storyNodes = {
     start: new TreeNode("In a land of legends, you, Sir Lancelot, the valiant knight, awaken from a dream in your chamber. \n The soft morning light filters through stained glass windows, casting kaleidoscopic patterns on your chamber walls. You feel a stirring within, a calling to your quest - the search for the mythical Excalibur. Your journey begins in your room. The wise old wizard's prophecy lingers in your mind: Excalibur lies hidden in a mystical lake guarded by a dragon of immense power. Do you, Sir Lancelot, heed the call and continue your quest to find Excalibur?", 'continueQuest', 'endRejected'),
 
-    continueQuest: new TreeNode("You, Sir Lancelot, accept the wizard's guidance and resolve to continue your noble quest. With armor donned and sword in hand, you step into the world beyond your chamber, where adventure and danger await. The path unfolds before you like an untold story. Will you venture into the forest, where ancient secrets lie?", 'enterForest', 'endRejected'),
+    continueQuest: new TreeNode("You, Sir Lancelot, accept the wizard's guidance and resolve to continue your noble quest. With armor donned, you step into the world beyond your chamber, where adventure and danger await. The path unfolds before you like an untold story. Will you venture into the forest, where ancient secrets lie?", 'enterForest', 'endRejected'),
     
     endRejected: new TreeNode("You, Sir Lancelot, reject the wizard's guidance and choose to remain in your chamber. The dream of Excalibur fades away, and the world remains untouched by your valor. The End."),
     

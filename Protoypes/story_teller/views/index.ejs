@@ -3,20 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/UI.css">
     <title>Story Webpage</title>
 </head>
 <body>
-    <h1><%= question %></h1>
-    <% if (!storyNodes[currentNode].yesNode && !storyNodes[currentNode].noNode) { %>
-        <p>The end.</p>
-    <% } else { %>
-        <form action="/answer/yes" method="get">
-            <input type="submit" value="Yes" />
-        </form>
-        <form action="/answer/no" method="get">
-            <input type="submit" value="No" />
-        </form>
-    <% } %>
+    <div class="container">
+        <div id="prompt">
+            <p><%= question %></p>
+        </div>
+        <% if (!storyNodes[currentNode].yesNode && !storyNodes[currentNode].noNode) { %>
+            <p>The end.</p>
+        <% } else { %>
+            <div class="buttons">
+                <form action="/answer/yes" method="get">
+                    <button id="yesButton" type="submit">Yes</button>
+                </form>
+                <form action="/answer/no" method="get">
+                    <button id="noButton" type="submit">No</button>
+                </form>
+            </div>
+        <% } %>
+    </div>
 </body>
 </html>
+

@@ -3,27 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/UI.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- <link rel="stylesheet" href="/UI.css"> -->
     <title>Story Webpage</title>
 </head>
-<body>
-    <div class="container">
-        <div id="prompt">
-            <p><%= question %></p>
+<body style="background: linear-gradient(to bottom, #7ed9c3, #6ba6d8); font-family: 'Poppins', sans-serif;">
+    <div class="container d-flex justify-content-center align-items-center min-vh-100">
+        <div class="text-center border rounded p-4 bg-light shadow" style="max-width: 600px;">
+            <p style="color: #333; font-size: 24px; font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); letter-spacing: 1px; padding: 20px; border: 2px solid #d1d1d1; border-radius: 20px; background-color: #f5f5f5; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); height: 300px; overflow: auto;">
+                <%= question %>
+            </p>
+            <% if (!storyNodes[currentNode].yesNode && !storyNodes[currentNode].noNode) { %>
+                <p>The end.</p>
+            <% } else { %>
+                <div class="buttons d-flex justify-content-center mt-4">
+                    <form action="/answer/yes" method="get">
+                        <button id="yesButton" type="submit" class="btn btn-primary btn-lg">Yes</button>
+                    </form>
+                    <form action="/answer/no" method="get">
+                        <button id="noButton" type="submit" class="btn btn-danger btn-lg">No</button>
+                    </form>
+                </div>
+            <% } %>
         </div>
-        <% if (!storyNodes[currentNode].yesNode && !storyNodes[currentNode].noNode) { %>
-            <p>The end.</p>
-        <% } else { %>
-            <div class="buttons">
-                <form action="/answer/yes" method="get">
-                    <button id="yesButton" type="submit">Yes</button>
-                </form>
-                <form action="/answer/no" method="get">
-                    <button id="noButton" type="submit">No</button>
-                </form>
-            </div>
-        <% } %>
     </div>
 </body>
 </html>
-

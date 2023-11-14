@@ -8,22 +8,23 @@
 </head>
 <body>
     <div class="container">
-        <div id="prompt">
-            <p><%= question %></p>
-        </div>
+        <% for (let i = 0; i < answersList.length; i++) { %>
+            <div class="prompt">
+                <p><%= storyNodes[answersList[i]].question %></p>
+            </div>
+        <% } %>
         <% if (!storyNodes[currentNode].yesNode && !storyNodes[currentNode].noNode) { %>
             <p>The end.</p>
         <% } else { %>
             <div class="buttons">
                 <form action="/answer/yes" method="get">
-                    <button id="yesButton" type="submit">Yes</button>
+                    <button id="yesButton" type="submit" <% if (!storyNodes[currentNode].yesNode) { %> disabled <% } %>>Yes</button>
                 </form>
                 <form action="/answer/no" method="get">
-                    <button id="noButton" type="submit">No</button>
+                    <button id="noButton" type="submit" <% if (!storyNodes[currentNode].noNode) { %> disabled <% } %>>No</button>
                 </form>
             </div>
         <% } %>
     </div>
 </body>
 </html>
-

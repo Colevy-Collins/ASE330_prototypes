@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/UI.css">
+    <style>
+        body {
+            margin: 0;
+            padding-bottom: 60px;
+            background-color: #ecf0f1;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .outer-container {
+            background-color: #f0f0f0; /* Grey background color */
+            padding: 20px;
+            border-radius: 25px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .container {
+            position: relative;
+            min-height: 100vh;
+            border-radius: 25px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(to bottom right, #3498db, #2ecc71); /* Gradient border color */
+            border: 8px solid transparent; /* Transparent border to show gradient background */
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #3498db, #2ecc71);
+            -webkit-background-clip: text;
+            color: transparent;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .prompt {
+            margin-bottom: 20px;
+            background-color: #fff;
+            border: 2px solid #3498db;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+
+        p {
+            margin: 0;
+            color: #333;
+        }
+
+        .buttons {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #34495e;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-radius: 15px;
+        }
+
+        #yesButton,
+        #noButton {
+            width: 120px;
+            padding: 15px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #2ecc71;
+            border: 2px solid #27ae60;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: background-color 0.3s, border-color 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        #yesButton:hover,
+        #noButton:hover {
+            background-color: #218c74;
+            border-color: #1e8449;
+        }
+    </style>
+    <title>VersaTale</title>
+</head>
+<body>
+    <div class="outer-container">
+        <h1>VersaTale</h1>
+        <div class="container">
+            <% for (let i = answersList.length - 1; i >= 0; i--) { %>
+                <div class="prompt">
+                    <p><%= storyNodes[answersList[i]].question %></p>
+                </div>
+            <% } %>
+            <% if (storyNodes[currentNode].yesNode && storyNodes[currentNode].noNode) { %>
+                <div class="buttons">
+                    <form action="/answer/yes" method="get">
+                        <button id="yesButton" type="submit">Yes</button>
+                    </form>
+                    <form action="/answer/no" method="get">
+                        <button id="noButton" type="submit">No</button>
+                    </form>
+                </div>
+            <% } %>
+        </div>
+    </div>
+</body>
+</html>

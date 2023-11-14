@@ -95,14 +95,14 @@ function traverseStory(answer) {
 }
 
 app.get('/', (req, res) => {
-    res.render('fixedTextBox', { storyNodes, answersList });
+    res.render('BTTFixedButton', { storyNodes, answersList, currentNode });
 });
 
 app.get('/answer/:answer', (req, res) => {
     const answer = req.params.answer.toLowerCase();
     if (answer === 'yes' || answer === 'no') {
         traverseStory(answer);
-        res.render('fixedTextBox', { storyNodes, answersList });
+        res.render('BTTFixedButton', { storyNodes, answersList, currentNode });
     } else {
         res.send('Invalid answer. Please select either "yes" or "no".');
     }

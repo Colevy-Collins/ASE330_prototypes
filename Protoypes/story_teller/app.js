@@ -83,6 +83,7 @@ for (const node in nodeConnections) {
 }
 
 let currentNode = 'start';
+let previousQuestions = [];
 
 function traverseStory(answer) {
     if (answer === 'yes' && storyNodes[currentNode].yesNode) {
@@ -93,14 +94,29 @@ function traverseStory(answer) {
 }
 
 app.get('/', (req, res) => {
-    res.render('fixedTextBox', { question: storyNodes[currentNode].question, storyNodes, currentNode });
+    previousQuestions.push(storyNodes[currentNode].question)
+    res.render('fixedTextBox', { question: storyNodes[currentNode].question, storyNodes, currentNode, previousQuestions });
 });
 
+// app.get('/answer/:answer', (req, res) => {
+    
+//     const answer = req.params.answer.toLowerCase();
+//     if (answer === 'yes' || answer === 'no') {
+//         traverseStory(answer);
+//         previousQuestions.push(storyNodes[currentNode].question)
+//         res.render('fixedTextBox', { question: storyNodes[currentNode].question, storyNodes, currentNode, previousQuestions });
+//     } else {
+//         res.send('Invalid answer. Please select either "yes" or "no".');
+//     }
+// });
+
 app.get('/answer/:answer', (req, res) => {
+    
     const answer = req.params.answer.toLowerCase();
     if (answer === 'yes' || answer === 'no') {
         traverseStory(answer);
-        res.render('fixedTextBox', { question: storyNodes[currentNode].question, storyNodes, currentNode });
+        previousQuestions.push(storyNodes[currentNode].question)
+        res.json({ question: storyNodes[currentNode].question, storyNodes, currentNode, previousQuestions });
     } else {
         res.send('Invalid answer. Please select either "yes" or "no".');
     }

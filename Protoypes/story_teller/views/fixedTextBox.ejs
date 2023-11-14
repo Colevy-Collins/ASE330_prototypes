@@ -10,22 +10,60 @@
 <body style="background: linear-gradient(to bottom, #7ed9c3, #6ba6d8); font-family: 'Poppins', sans-serif;">
     <div class="container d-flex justify-content-center align-items-center min-vh-100">
         <div class="text-center border rounded p-4 bg-light shadow" style="max-width: 600px;">
-            <p style="color: #333; font-size: 24px; font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); letter-spacing: 1px; padding: 20px; border: 2px solid #d1d1d1; border-radius: 20px; background-color: #f5f5f5; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); height: 300px; overflow: auto;">
+            <p id="story" style="color: #333; font-size: 24px; font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); letter-spacing: 1px; padding: 20px; border: 2px solid #d1d1d1; border-radius: 20px; background-color: #f5f5f5; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); height: 300px; overflow: auto;">
                 <%= question %>
-            </p>
+                <br><br>
+            </p> 
             <% if (!storyNodes[currentNode].yesNode && !storyNodes[currentNode].noNode) { %>
                 <p>The end.</p>
             <% } else { %>
                 <div class="buttons d-flex justify-content-center mt-4">
-                    <form action="/answer/yes" method="get">
+                    <!-- <form action="/answer/yes" method="get"> -->
+                    <!-- <form>
                         <button id="yesButton" type="submit" class="btn btn-primary btn-lg">Yes</button>
                     </form>
                     <form action="/answer/no" method="get">
                         <button id="noButton" type="submit" class="btn btn-danger btn-lg">No</button>
-                    </form>
+                    </form> -->
+                    <div class="buttons d-flex justify-content-center mt-4">
+                        <button id="yesButton" class="btn btn-primary btn-lg">Yes</button>
+                        <button id="noButton" class="btn btn-danger btn-lg">No</button>
+                    </div>
                 </div>
             <% } %>
         </div>
     </div>
 </body>
+<script>
+    document.getElementById('yesButton').addEventListener('click', function () {
+        // Make an asynchronous request to the server for the next question
+        fetch('/answer/yes')
+            .then(response => response.json())
+            .then(data => {
+                // Update the displayed question with the next question
+                document.getElementById("story").insertAdjacentHTML('beforeend', data.question)
+                //Create 2 line breaks after question is added
+                document.getElementById("story").appendChild(document.createElement("br"))
+                document.getElementById("story").appendChild(document.createElement("br"))
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    });
+    document.getElementById('noButton').addEventListener('click', function () {
+        // Make an asynchronous request to the server for the next question
+        fetch('/answer/no')
+            .then(response => response.json())
+            .then(data => {
+                // Update the displayed question with the next question
+                document.getElementById("story").insertAdjacentHTML('beforeend', data.question)
+                //Create 2 line breaks after question is added
+                document.getElementById("story").appendChild(document.createElement("br"))
+                document.getElementById("story").appendChild(document.createElement("br"))
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    });
+</script>
 </html>

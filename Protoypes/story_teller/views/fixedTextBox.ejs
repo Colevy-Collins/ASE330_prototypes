@@ -14,7 +14,6 @@
                 <%= question %>
                 <br>
                 <br>
-                10
                 <div class="d-flex justify-content-center">
                     <div id="loadStory" class="spinner-border" role="status" style="display:none">
                         <span class="sr-only"></span>
@@ -54,12 +53,15 @@
                     //Create 2 line breaks after question is added
                     document.getElementById("story").appendChild(document.createElement("br"))
                     document.getElementById("story").appendChild(document.createElement("br"))
+                    if (data.completedStory){
+                        document.getElementById("yesButton").style.display = "none"
+                    }
                 })
                 .catch(error => {
                     console.error('Error:', error);
                 });
-            document.getElementById("loadStory").style.display = "none"
-        }, 800)
+            document.getElementById("loadStory").style.display = "none";
+        }, 500)
     });
     document.getElementById('noButton').addEventListener('click', function () {
         // Make an asynchronous request to the server for the next question
@@ -73,12 +75,15 @@
                     //Create 2 line breaks after question is added
                     document.getElementById("story").appendChild(document.createElement("br"))
                     document.getElementById("story").appendChild(document.createElement("br"))
+                    if (data.completedStory){
+                        document.getElementById("noButton").style.display = "none"
+                    }
                 })
                 .catch(error => {
                     console.error('Error:', error);
                 });
             document.getElementById("loadStory").style.display = "none"
-        }, 800)
+        }, 500)
     });
 </script>
 </html>

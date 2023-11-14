@@ -84,6 +84,7 @@ for (const node in nodeConnections) {
 
 let currentNode = 'start';
 let previousQuestions = [];
+let completedStory = false;
 
 function traverseStory(answer) {
     if (answer === 'yes' && storyNodes[currentNode].yesNode) {
@@ -95,7 +96,7 @@ function traverseStory(answer) {
 
 app.get('/', (req, res) => {
     previousQuestions.push(storyNodes[currentNode].question)
-    res.render('fixedTextBox', { question: storyNodes[currentNode].question, storyNodes, currentNode, previousQuestions });
+    res.render('fixedTextBox', { question: storyNodes[currentNode].question, storyNodes, currentNode, previousQuestions, completedStory });
 });
 
 // app.get('/answer/:answer', (req, res) => {
@@ -111,12 +112,11 @@ app.get('/', (req, res) => {
 // });
 
 app.get('/answer/:answer', (req, res) => {
-    
     const answer = req.params.answer.toLowerCase();
     if (answer === 'yes' || answer === 'no') {
         traverseStory(answer);
         previousQuestions.push(storyNodes[currentNode].question)
-        res.json({ question: storyNodes[currentNode].question, storyNodes, currentNode, previousQuestions });
+        res.json({ question: storyNodes[currentNode].question, storyNodes, currentNode, previousQuestions, completedStory: completedStory });
     } else {
         res.send('Invalid answer. Please select either "yes" or "no".');
     }

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat with Bot</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div id="chatbox">
+        <!-- Chat messages will go here -->
+    </div>
+    <input type="text" id="userInput">
+    <button onclick="sendMessage()">Send</button>
+
+    <script>
+        function sendMessage() {
+            let message = $('#userInput').val();
+            $('#userInput').val(''); // Clear the input
+
+            addMessageToChatbox('User: ' + message);
+
+            $.post('/chat', { message: message })
+                .done(function(data) {
+                    addMessageToChatbox('Bot: ' + data.response);
+                })
+                .fail(function() {
+                    addMessageToChatbox('Bot could not respond at the moment.');
+                });
+        }
+
+        function addMessageToChatbox(message) {
+            $('#chatbox').append(message + '<br>');
+        }
+    </script>
+</body>
+</html>

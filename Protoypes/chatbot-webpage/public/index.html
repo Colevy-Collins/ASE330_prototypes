@@ -21,7 +21,7 @@
 
             $.post('/chat', { message: message })
                 .done(function(data) {
-                    addMessageToChatbox('Bot: ' + data.response);
+                    addMessageToChatbox('Bot: ' + data.message);
                 })
                 .fail(function() {
                     addMessageToChatbox('Bot could not respond at the moment.');

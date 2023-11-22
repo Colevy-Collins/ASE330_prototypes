@@ -94,15 +94,42 @@ function traverseStory(answer) {
     answersList.push(currentNode); // Add the current node to the list
 }
 
+// New function to go back to the previous prompt
+function goBack() {
+    if (answersList.length > 1) {
+        answersList.pop(); // Remove last choice
+        currentNode = answersList[answersList.length - 1]; // Set current node to previous
+    }
+}
+
+// And update the back button routes:
+app.get('/back', (req, res) => {
+    goBack(); // Call goBack function to update currentNode and answersList
+    if (req.query.view === 'fullHistory') {
+        res.render('fullHistory', { storyNodes, answersList, currentNode });
+    } else {
+        res.render('currentPrompt', { storyNodes, answersList, currentNode });
+    }
+});
+
+// New route to show the full history view
+app.get('/fullHistory', (req, res) => {
+    res.render('fullHistory', { storyNodes, answersList, currentNode });
+});
+
+app.get('/currentPrompt', (req, res) => {
+    res.render('currentPrompt', { storyNodes, answersList, currentNode });
+});
+
 app.get('/', (req, res) => {
-    res.render('BTTFixedButton', { storyNodes, answersList, currentNode });
+    res.render('currentPrompt', { storyNodes, answersList, currentNode }); // Include answersList in the render context
 });
 
 app.get('/answer/:answer', (req, res) => {
     const answer = req.params.answer.toLowerCase();
     if (answer === 'yes' || answer === 'no') {
         traverseStory(answer);
-        res.render('BTTFixedButton', { storyNodes, answersList, currentNode });
+        res.render('currentPrompt', { storyNodes, answersList, currentNode }); // Ensure answersList is passed here
     } else {
         res.send('Invalid answer. Please select either "yes" or "no".');
     }

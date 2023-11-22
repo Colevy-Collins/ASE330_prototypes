@@ -26,7 +26,7 @@ app.post('/chat', async (req, res) => {
 
     const run = await client.beta.threads.runs.create(
         thread.id,
-        { assistant_id: "asst_KaRiEThA1tePbFVurmRmRNeK", instructions: "Talk to the users" }
+        { assistant_id: "asst_AmjQ55bLUIHbDS8BVV7zjedd"}
     );
 
     while (true) {

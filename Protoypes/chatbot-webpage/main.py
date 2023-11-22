@@ -12,6 +12,7 @@ def solve_equation(user_input):
     client = OpenAI(api_key=openai.api_key)
 
     # Step 1: Create an Assistant
+    #hard code assistant id
     assistant=client.beta.assistants.create(
         instructions="You are a personal math tutor. Write and run code to answer math questions.", 
         tools=[{"type": "code_interpreter"}], 
@@ -19,6 +20,7 @@ def solve_equation(user_input):
     )
 
     # Step 2: Create a Thread
+    #hard code thread id
     thread = client.beta.threads.create()
 
     # Step 3: Add a message to the Thread with user input

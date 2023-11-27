@@ -292,6 +292,37 @@
     
         // Start checking for updates as soon as the page loads.
         document.addEventListener('DOMContentLoaded', checkForStoryUpdate);
+
+        function showThinkingNotification() {
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.id = 'thinkingNotification';
+    notification.style.position = 'fixed';
+    notification.style.left = '50%';
+    notification.style.top = '50%';
+    notification.style.transform = 'translate(-50%, -50%)';
+    notification.style.backgroundColor = 'rgba(0, 0, 0, 0.75)';
+    notification.style.color = 'white';
+    notification.style.padding = '10px 20px';
+    notification.style.borderRadius = '5px';
+    notification.style.zIndex = '1000';
+    notification.textContent = 'The AI is thinking, Please wait...';
+
+    // Append notification to the body
+    document.body.appendChild(notification);
+
+    // Remove the notification after 4 seconds (optional)
+    // You might want to remove it based on the response from the server instead
+     setTimeout(() => {
+         if (notification) {
+             notification.remove();
+         }
+     }, 5000);
+}
+
+// Attach the notification function to the Yes and No buttons
+document.querySelector('#yesButton').addEventListener('click', showThinkingNotification);
+document.querySelector('#noButton').addEventListener('click', showThinkingNotification);
     </script>
 </body>
 </html>

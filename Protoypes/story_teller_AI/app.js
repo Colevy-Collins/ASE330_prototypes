@@ -4,7 +4,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const { OpenAI } = require('openai');
 
-const OPENAI_API_KEY = "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";
+const OPENAI_API_KEY = "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";
 const client = new OpenAI({ apiKey: OPENAI_API_KEY });
 
 app.set('view engine', 'ejs');
@@ -15,40 +15,50 @@ app.use(express.static(path.join(__dirname, 'public')));
 let thread
 
 let answersList = []; // Initialize the list with the start node
-
+let isTraverseStoryRunning = false;
 async function traverseStory(answer) {
 
-    let userMessage = answer;
-
-    // Your custom logic goes here.
-
-    const userMessageResponse = await client.beta.threads.messages.create(
-        thread.id,
-        { role: "user", content: userMessage }
-    );
-
-    const run = await client.beta.threads.runs.create(
-        thread.id,
-        { assistant_id: "asst_AmjQ55bLUIHbDS8BVV7zjedd"}
-    );
-
-    while (true) {
-        const runResponse = await client.beta.threads.runs.retrieve(thread.id, run.id);
-
-        console.log("Run status:", runResponse.status);
-        if (runResponse.status === 'completed') {
-            break;
-        }
-
-        await new Promise(resolve => setTimeout(resolve, 1000));
+    if (isTraverseStoryRunning) {
+        console.log("traverseStory is already running...");
+        return; // If traverseStory is running, we simply return
     }
 
-    const responseMessages = await client.beta.threads.messages.list(thread.id);
-    const assistResponse = responseMessages.data[0].content[0].text.value;
-    // Implement your custom logic here.
-    // TODO: Process the userMessage and populate the responseMessage.
+    isTraverseStoryRunning = true; // Set the flag to indicate traverseStory is running
+    try {
+        let userMessage = answer;
 
-    answersList.push(assistResponse); // Add the current node to the list
+        const userMessageResponse = await client.beta.threads.messages.create(
+            thread.id,
+            { role: "user", content: userMessage }
+        );
+    
+        const run = await client.beta.threads.runs.create(
+            thread.id,
+            { assistant_id: "asst_AmjQ55bLUIHbDS8BVV7zjedd"}
+        );
+    
+        while (true) {
+            const runResponse = await client.beta.threads.runs.retrieve(thread.id, run.id);
+    
+            console.log("Run status:", runResponse.status);
+            if (runResponse.status === 'completed') {
+                break;
+            }
+    
+            await new Promise(resolve => setTimeout(resolve, 1000));
+        }
+    
+        const responseMessages = await client.beta.threads.messages.list(thread.id);
+        const assistResponse = responseMessages.data[0].content[0].text.value;
+        // Implement your custom logic here.
+        // TODO: Process the userMessage and populate the responseMessage.
+    
+        answersList.push(assistResponse); // Add the current node to the list
+    } catch (error) {
+        console.error("An error occurred during traverseStory: ", error);
+    } finally {
+        isTraverseStoryRunning = false; // Reset the flag when done
+    }
 }
 
 // New function to go back to the previous prompt
@@ -90,6 +100,14 @@ app.get('/answer/:answer',async (req, res) => {
     } else {
         res.send('Invalid answer. Please select either "yes" or "no".');
     }
+});
+
+app.get('/currentStoryStatus', (req, res) => {
+    // Send whether the story is ready and, if so, the latest segment.
+    res.json({
+        storyReady: !isTraverseStoryRunning,
+        latestStorySegment: answersList[answersList.length - 1] // Latest story segment.
+    });
 });
 
 app.listen(3000, async () => {

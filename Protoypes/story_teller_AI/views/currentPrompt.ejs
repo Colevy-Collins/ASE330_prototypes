@@ -272,7 +272,26 @@
         </div>
     </div>
     
-    <!-- Your existing script tags, if any, go here -->
-    <!-- ... -->
+    <script>
+        // This function checks the server for updates and refreshes the page content accordingly.
+        function checkForStoryUpdate() {
+            fetch('/currentStoryStatus') // Endpoint to check if the story update is ready.
+                .then(response => response.json())
+                .then(data => {
+                    if (data.storyReady) {
+                        // If the story is ready, we'll refresh the displayed content.
+                        const promptContainer = document.querySelector('.current-prompt-container .prompt p');
+                        promptContainer.textContent = data.latestStorySegment; // Update the content with the latest segment from the server.
+                    } else {
+                        // If the story is not ready, we keep polling.
+                        setTimeout(checkForStoryUpdate, 2000); // Check again after 2 seconds.
+                    }
+                })
+                .catch(error => console.error('Error fetching story status:', error));
+        }
+    
+        // Start checking for updates as soon as the page loads.
+        document.addEventListener('DOMContentLoaded', checkForStoryUpdate);
+    </script>
 </body>
 </html>

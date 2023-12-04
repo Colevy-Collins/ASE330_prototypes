@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VersaTale</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Merriweather:wght@400;700&display=swap');
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+            padding-top: 20px;
+            background: linear-gradient(to bottom, #84fab0, #8fd3f4);
+            font-family: 'Merriweather', serif; /* Add a serif font for body text */
+            color: #34495e; /* Deep blue color */
+            padding-bottom: 100px; /* Height of the button container plus additional space */
+        }
+
+        .outer-container {
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 20px;
+            background-color: #f3f4f6;
+            box-shadow: 0px 10px 20px 0px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 1s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .container {
+            border: 2px solid #d1d1d1;
+            padding: 20px;
+            border-radius: 15px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+            overflow: hidden;
+            animation: slideUpFadeIn 1s ease-out;
+        }
+
+        @keyframes slideUpFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            line-height: 1.2;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        h2 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            text-align: left;
+        }
+
+        .prompt {
+            padding: 15px;
+            background-color: #fff;
+            border-radius: 10px;
+            margin: 10px 0;
+            border: 2px solid #e1e1e1;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+            animation: scaleIn 0.5s ease-out;
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .current-prompt {
+            border-left: 6px solid #3498db;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2), inset 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #ecf0f1;
+        }
+
+        .old-prompt {
+            background-color: #eaeaea;
+            color: #444;
+            border-left: 6px solid #bdc3c7;
+        }
+
+        /* Updated button styles with black text and a serif font */
+        .buttons {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #34495e;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.2);
+            animation: fadeInUpwards 0.6s ease-in-out;
+	    justify-content: space-between;
+            width: calc(100% - 40px); /* Account for padding on the left and right */
+            padding: 15px 20px; /* Adjust padding for natural side alignment */
+            
+        }
+	#backButton {
+            margin: 0 15px;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            color: #000;
+            font-family: 'Merriweather', serif;
+            font-weight: 700;
+            letter-spacing: 1.2px;
+            box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.15);
+            background: #bdc3c7;
+        }
+
+        #backButton:hover {
+            transform: translateY(-4px);
+            box-shadow: 0px 7px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        #backButton:active {
+            transform: translateY(-1px);
+            box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        @keyframes fadeInUpwards {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        #yesButton, #noButton {
+            margin: 0 10px;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            color: #000; /* Black text color */
+            font-family: 'Merriweather', serif; /* Serif font for button text */
+            font-weight: 700; /* Bold font weight */
+            letter-spacing: 1.2px; /* Letter spacing */
+            box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.15);
+            background: linear-gradient(to bottom, #8fd3f4, #84fab0); /* Gradient background */
+        }
+
+        #yesButton:hover, #noButton:hover {
+            transform: translateY(-4px);
+            box-shadow: 0px 7px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        #yesButton:active, #noButton:active {
+            transform: translateY(-1px);
+            box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .button-group-left, .button-group-right {
+            display: flex;
+        }
+
+
+        #switchButton {
+            margin: 0 15px;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            color: #fff; /* White text color */
+            font-family: 'Merriweather', serif; /* Match body font */
+            font-weight: 700; /* Bold font weight */
+            letter-spacing: 1.2px; /* Match button spacing */
+            background: #3498db; /* Blue to match theme */
+            box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.20);
+        }
+
+        #switchButton:hover {
+            transform: translateY(-4px);
+            box-shadow: 0px 7px 12px rgba(0, 0, 0, 0.25);
+            background: #2980b9; /* Darker blue on hover */
+        }
+
+        #switchButton:active {
+            transform: translateY(-1px);
+            box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.15);
+        }
+
+    </style>
+</head>
+<body>
+    <div class="outer-container">
+        <h1>VersaTale</h1>
+        <div class="container current-prompt-container">
+            <h2>Current Prompt</h2>
+            <div class="prompt current-prompt">
+                <p><%= answersList[(answersList.length - 1)] %></p>
+            </div>
+        </div>
+        
+        <!-- Buttons section -->
+    <div class="buttons">
+        <div class="button-group-left">
+            <!-- "Yes" and "No" buttons -->
+            <% if (1 === 1) { %> <!-- check to "the end text. add later" -->
+                <form action="/answer/1" method="get">
+                    <button id="yesButton" type="submit">1</button>
+                </form>
+                <form action="/answer/2" method="get">
+                    <button id="noButton" type="submit">2</button>
+                </form>
+            <% } %>
+        </div>
+
+        <div class="button-group-right">
+            <% if (answersList.length > 1) { %>
+                <!-- "Back" button -->
+                <form action="/back" method="get">
+                    <button id="backButton" type="submit">Back</button>
+                </form>
+            <% } %>
+            <!-- "Full History" button -->
+            <form action="/fullHistory" method="get">
+                <button id="switchButton" type="submit">Full History</button>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        // This function checks the server for updates and refreshes the page content accordingly.
+        function checkForStoryUpdate() {
+            fetch('/currentStoryStatus') // Endpoint to check if the story update is ready.
+                .then(response => response.json())
+                .then(data => {
+                    if (data.storyReady) {
+                        // If the story is ready, we'll refresh the displayed content.
+                        const promptContainer = document.querySelector('.current-prompt-container .prompt p');
+                        promptContainer.textContent = data.latestStorySegment; // Update the content with the latest segment from the server.
+                    } else {
+                        // If the story is not ready, we keep polling.
+                        setTimeout(checkForStoryUpdate, 2000); // Check again after 2 seconds.
+                    }
+                })
+                .catch(error => console.error('Error fetching story status:', error));
+        }
+    
+        // Start checking for updates as soon as the page loads.
+        document.addEventListener('DOMContentLoaded', checkForStoryUpdate);
+
+        function showThinkingNotification() {
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.id = 'thinkingNotification';
+    notification.style.position = 'fixed';
+    notification.style.left = '50%';
+    notification.style.top = '50%';
+    notification.style.transform = 'translate(-50%, -50%)';
+    notification.style.backgroundColor = 'rgba(0, 0, 0, 0.75)';
+    notification.style.color = 'white';
+    notification.style.padding = '10px 20px';
+    notification.style.borderRadius = '5px';
+    notification.style.zIndex = '1000';
+    notification.textContent = 'The AI is thinking, Please wait...';
+
+    // Append notification to the body
+    document.body.appendChild(notification);
+
+    // Remove the notification after 4 seconds (optional)
+    // You might want to remove it based on the response from the server instead
+     setTimeout(() => {
+         if (notification) {
+             notification.remove();
+         }
+     }, 5000);
+}
+
+// Attach the notification function to the Yes and No buttons
+document.querySelector('#yesButton').addEventListener('click', showThinkingNotification);
+document.querySelector('#noButton').addEventListener('click', showThinkingNotification);
+    </script>
+</body>
+</html>

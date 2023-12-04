@@ -146,6 +146,7 @@ app.post('/api/submit-form', async(req, res) => {
     }
 
     await createAI()
+    await traverseStory(answer);
     res.render('currentPrompt', { answersList }); // Ensure answersList is passed here
     
 

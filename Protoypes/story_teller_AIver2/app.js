@@ -86,13 +86,14 @@ async function createAI() {
             7. Ensure that each combat scenario has the potential to result in lasting effects, including the possibility of death. Give the user the status of their effects with each combat prompt 
             8. Introduce the element of chance for death in every prompt. Death of the user should be very possible throughout the story. The user should be able to die for being risky or choosing a path that leads to death.
             9. Make it clear that the story concludes if the user dies.
-            10. Establish the overarching plot of the story, focusing on the quest to locate an essential object required to confront a boss enemy.
+            10. The story plot should be based on a ${selectedOptions[2]}story.
             11. Conclude the narrative when the boss is successfully defeated.
             12. The story should be ${selectedOptions[1]}-themed
             13. combat should have great detail and abundant. 
             14. The user should be able to go back one prompt at a time to try the other option.
             15. provide output only in a json object with the attributes for the prompt which holds all the text of the story, each option and colors that has colors for html attributes. There should be 6 colors for the web page that are vibrant and ${selectedOptions[1]} themed. The json object should have a "prompt", "optionX" where X is the number for the option, "color1", "color1", "color2", "color3", "color4", "color5", "color6".
-            16. Each prompt should contain rich details but is contained in ${selectedOptions[2]} paragraphs  
+            16. Each prompt should contain rich details but is ${selectedOptions[3]} in length. 
+            17. provide output only in a json object with the attributes for the prompt which holds all the text of the story, each option and colors that has colors for html attributes. There should be 6 colors for the web page that are vibrant and space themed. The json object should have a "prompt", "optionX" where X is the number for the option, "color1", "color1", "color2", "color3", "color4", "color5", "color6".
             `,
             model: "gpt-4-1106-preview",
           });
@@ -146,21 +147,42 @@ app.post('/api/submit-form', async(req, res) => {
     }
 
     await createAI()
-    await traverseStory(answer);
+    thread = await client.beta.threads.create();
+    await traverseStory("start the story");
     res.render('currentPrompt', { answersList }); // Ensure answersList is passed here
     
 
 });
 
-app.get('/answer/:answer',async (req, res) => {
+app.get('/answer/:answer', async (req, res) => {
     const answer = req.params.answer.toLowerCase();
-    if (answer === '1' || answer === '2') {
+
+    // Before calling traverseStory, you may want to validate the answer
+    if (!isValidAnswer(answer)) {
+        return res.status(400).json({ error: 'Invalid answer' });
+    }
+
+    try {
+        // Call the asynchronous function to process the answer
         await traverseStory(answer);
-        res.render('currentPrompt', { answersList }); // Ensure answersList is passed here
-    } else {
-        res.send('Invalid answer. Please select either "yes" or "no".');
+        
+        // Respond with JSON containing the updated answersList.
+        // You might want to include other details as well if needed.
+        res.json({ answersList });
+    } catch (error) {
+        // Handle any errors that might have occurred during processing
+        console.error('Error processing answer:', error);
+        res.status(500).json({ error: 'Internal server error' });
     }
 });
+
+
+// Helper function to validate the user's answer.
+// You need to define what constitutes a valid answer in your case.
+function isValidAnswer(answer) {
+    // For demonstration purposes, let's assume the answer should be a digit.
+    return /^\d+$/.test(answer);
+}
 
 app.get('/currentStoryStatus', (req, res) => {
     // Send whether the story is ready and, if so, the latest segment.
@@ -171,7 +193,5 @@ app.get('/currentStoryStatus', (req, res) => {
 });
 
 app.listen(3000, async () => {
-    thread = await client.beta.threads.create();
-    await traverseStory("start the story");
     console.log('Server is running on port 3000');
 });

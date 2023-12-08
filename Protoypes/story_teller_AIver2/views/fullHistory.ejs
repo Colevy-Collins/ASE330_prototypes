@@ -261,12 +261,8 @@
         <div class="buttons">
             <div class="button-group">
                 <!-- "Yes" and "No" answer buttons -->
-                <form action="/answer/1" method="get">
                     <button id="yesButton" type="submit">1</button>
-                </form>
-                <form action="/answer/2" method="get">
                     <button id="noButton" type="submit">2</button>
-                </form>
             </div>
             <div class="button-group">
                 <% if (answersList.length > 1) { %>
@@ -283,5 +279,84 @@
             </div>
         </div>
     <% } %>
+
+    <script>
+        document.querySelector('#yesButton').addEventListener('click', () => {
+            submitAnswer('1');
+            showThinkingNotification();
+        });
+
+        document.querySelector('#noButton').addEventListener('click', () => {
+            submitAnswer('2');
+            showThinkingNotification();
+        });
+
+        function submitAnswer(answer) {
+            fetch(`/answer/${answer}`) // Send a GET request to the server with the selected answer
+                .then(response => response.json()) // Parse the JSON response
+                .then(data => {
+                    updatePrompt(data.answersList); // Update the prompt on the page with the new data
+                    // The thinking notification can be removed here if the AI response is quick
+                    // Otherwise, you may want to keep it until the server confirms the story is ready
+                })
+                .catch(error => console.error('Error submitting answer:', error));
+        }
+
+        function updatePrompt(answersList) {
+            // Assuming the entire answersList array is returned and the last item is the current prompt
+            const promptContainer = document.querySelector('.current-prompt-container .prompt p');
+            promptContainer.textContent = answersList[answersList.length - 1];
+        }
+        // This function checks the server for updates and refreshes the page content accordingly.
+        function checkForStoryUpdate() {
+            fetch('/currentStoryStatus') // Endpoint to check if the story update is ready.
+                .then(response => response.json())
+                .then(data => {
+                    if (data.storyReady) {
+                        // If the story is ready, we'll refresh the displayed content.
+                        const promptContainer = document.querySelector('.current-prompt-container .prompt p');
+                        promptContainer.textContent = data.latestStorySegment; // Update the content with the latest segment from the server.
+                    } else {
+                        // If the story is not ready, we keep polling.
+                        setTimeout(checkForStoryUpdate, 2000); // Check again after 2 seconds.
+                    }
+                })
+                .catch(error => console.error('Error fetching story status:', error));
+        }
+    
+        // Start checking for updates as soon as the page loads.
+        document.addEventListener('DOMContentLoaded', checkForStoryUpdate);
+
+        function showThinkingNotification() {
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.id = 'thinkingNotification';
+    notification.style.position = 'fixed';
+    notification.style.left = '50%';
+    notification.style.top = '50%';
+    notification.style.transform = 'translate(-50%, -50%)';
+    notification.style.backgroundColor = 'rgba(0, 0, 0, 0.75)';
+    notification.style.color = 'white';
+    notification.style.padding = '10px 20px';
+    notification.style.borderRadius = '5px';
+    notification.style.zIndex = '1000';
+    notification.textContent = 'The AI is thinking, Please wait...';
+
+    // Append notification to the body
+    document.body.appendChild(notification);
+
+    // Remove the notification after 4 seconds (optional)
+    // You might want to remove it based on the response from the server instead
+     setTimeout(() => {
+         if (notification) {
+             notification.remove();
+         }
+     }, 5000);
+}
+
+// Attach the notification function to the Yes and No buttons
+document.querySelector('#yesButton').addEventListener('click', showThinkingNotification);
+document.querySelector('#noButton').addEventListener('click', showThinkingNotification);
+    </script>
 </body>
 </html>

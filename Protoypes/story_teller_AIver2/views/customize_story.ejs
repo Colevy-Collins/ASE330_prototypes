@@ -5,12 +5,13 @@
 </head>
 <body>
     <h1>Please make your selections</h1>
-    <form action="/api/submit-form" method="post">
+    <form id="selectionsForm" action="/api/submit-form" method="post">
         <% 
         const selectors = [
-            { id: 1, name: 'Color', description: 'Select your favorite color:', options: ['Red', 'Green', 'Blue'] },
-            { id: 2, name: 'Car Brand', description: 'Choose a car brand you prefer:', options: ['Toyota', 'Ford', 'BMW'] },
-            { id: 3, name: 'Music Genre', description: 'What is your preferred music genre?', options: ['Rock', 'Hip Hop', 'Jazz'] }
+            { id: 1, name: 'option_count', description: 'How many story options would you like?', options: ['2', '4', '6'] },
+            { id: 2, name: 'theme', description: 'What theme whould you like?', options: ['space', 'modern', 'medieval', 'fantasy'] },
+            { id: 3, name: 'genre', description: 'What genre would you like?', options: ['true crime', 'action and adventure', 'mistory', 'horror'] },
+            { id: 4, name: 'length', description: 'How long would you like your prompts?', options: ['short', 'normal', 'long'] }
         ];
         selectors.forEach(selector => {
         %>
@@ -26,6 +27,29 @@
             <br>
         <% }); %>
         <button type="submit">Submit</button>
+        <button type="button" onclick="randomizeAndSubmit()">Randomize and Submit</button>
     </form>
+
+    <script type="text/javascript">
+        function getRandomOption(options) {
+            const randomIndex = Math.floor(Math.random() * options.length);
+            return options[randomIndex];
+        }
+    
+        function randomizeAndSubmit() {
+            const selectors = [
+                { id: 1, options: ['2', '4', '6'] },
+                { id: 2, options: ['space', 'modern', 'medieval', 'fantasy'] },
+                { id: 3, options: ['true crime', 'action and adventure', 'mistory', 'horror'] },
+                { id: 4, options: ['short', 'normal', 'long'] }
+            ];
+    
+            selectors.forEach(selector => {
+                document.getElementById('selector' + selector.id).value = getRandomOption(selector.options);
+            });
+    
+            document.getElementById('selectionsForm').submit();
+        }
+    </script>
 </body>
 </html>

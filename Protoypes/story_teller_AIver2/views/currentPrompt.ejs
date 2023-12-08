@@ -249,12 +249,8 @@
         <div class="button-group-left">
             <!-- "Yes" and "No" buttons -->
             <% if (1 === 1) { %> <!-- check to "the end text. add later" -->
-                <form action="/answer/1" method="get">
                     <button id="yesButton" type="submit">1</button>
-                </form>
-                <form action="/answer/2" method="get">
                     <button id="noButton" type="submit">2</button>
-                </form>
             <% } %>
         </div>
 
@@ -273,6 +269,32 @@
     </div>
     
     <script>
+        document.querySelector('#yesButton').addEventListener('click', () => {
+            submitAnswer('1');
+            showThinkingNotification();
+        });
+
+        document.querySelector('#noButton').addEventListener('click', () => {
+            submitAnswer('2');
+            showThinkingNotification();
+        });
+
+        function submitAnswer(answer) {
+            fetch(`/answer/${answer}`) // Send a GET request to the server with the selected answer
+                .then(response => response.json()) // Parse the JSON response
+                .then(data => {
+                    updatePrompt(data.answersList); // Update the prompt on the page with the new data
+                    // The thinking notification can be removed here if the AI response is quick
+                    // Otherwise, you may want to keep it until the server confirms the story is ready
+                })
+                .catch(error => console.error('Error submitting answer:', error));
+        }
+
+        function updatePrompt(answersList) {
+            // Assuming the entire answersList array is returned and the last item is the current prompt
+            const promptContainer = document.querySelector('.current-prompt-container .prompt p');
+            promptContainer.textContent = answersList[answersList.length - 1];
+        }
         // This function checks the server for updates and refreshes the page content accordingly.
         function checkForStoryUpdate() {
             fetch('/currentStoryStatus') // Endpoint to check if the story update is ready.

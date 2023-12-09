@@ -11,6 +11,7 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.urlencoded({ extended: true }));
 
 let thread
 let selectedOptions = {};
@@ -141,9 +142,14 @@ app.get('/', (req, res) => {
 
 app.post('/api/submit-form', async(req, res) => {
     // Extract selector values
-    for (let i = 1; i <= 14; i++) {
+    for (let i = 1; i <= 4; i++) {
         const selectorKey = `selector${i}`;
-        selectedOptions[selectorKey] = req.body[selectorKey];
+        if(req.body.hasOwnProperty(selectorKey)) {
+            selectedOptions[selectorKey] = req.body[selectorKey];
+        } else {
+            // Handle the absence of expected key here
+            console.log(`Missing selector: ${selectorKey}`);
+        }
     }
 
     await createAI()

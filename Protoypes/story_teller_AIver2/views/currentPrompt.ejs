@@ -268,6 +268,32 @@
     <% //console.log(promptText) %>
 </head>
 <body>
+<script>
+    //Create options on page load
+    function firstOptionsLoad() {
+        fetch('/currentStoryStatus') // Endpoint to check if the story update is ready.
+            .then(response => response.json())
+            .then(data => {
+                if (data.storyReady) {
+                    const optionsContainer = document.getElementById('options_text');
+                    optionsList = getOptionsFromJSON(data.latestStorySegment)
+                    optionsContainer.innerHTML = ``;
+                    for (let i = 0; i < optionsList[i].length; i++) {
+                        optionsContainer.innerHTML += optionsList[i] + '<br>';//Update options text with newjson
+                    }
+                    console.log("load Page has ran")
+                } else {
+                    // If the story is not ready, we keep polling.
+                    setTimeout(checkForStoryUpdate, 2000); // Check again after 2 seconds.
+                }
+            })
+            .catch(error => console.error('Error fetching story status:', error));
+    }
+    firstOptionsLoad()
+    function redirect() {
+        window.location.href = "http://localhost:3000/currentPrompt?";
+    }
+</script>
     <div class="outer-container">
         <h1>VersaTale</h1>
         <div class="container current-prompt-container">
@@ -275,8 +301,20 @@
             <div class="prompt current-prompt">
                 <p><%= promptText %></p><br>
                 <p id="options_text">
-                    options
+                    Options Generating...
                 </p>
+            </div>
+        </div>
+        <div class="container prompt-container" id="outer_historical_prompts" style="display:none">
+            <h2>Prompt History</h2>
+            <div id="historical_prompts" style="display:none">
+            <% for(let i = 0; i < answersList.length - 1; i++) { %>
+                <div class="prompt old-prompt" >
+                    <% let historicalPrompt = answersList[i].replace('\`\`\`json', ""); %>
+                    <% let historicalPromptText = JSON.parse(historicalPrompt.replace('\`\`\`', ""))["prompt"] %>
+                    <p><%= historicalPromptText %></p>
+                </div>
+            <% } %>
             </div>
         </div>
         
@@ -294,20 +332,15 @@
         </div>
 
         <div class="button-group-right">
-            <% if (answersList.length > 1) { %>
                 <!-- "Back" button -->
-                <form action="/back/c" method="get">
-                    <button id="backButton" type="submit">Back</button>
-                </form>
-            <% } %>
+                    <button id="backButton" type="submit" onclick="redirect(); <% if (answersList.length > 1) { %> goBackState() <% } %>">Back</button>
             <!-- "Full History" button -->
-            <form action="/fullHistory" method="get">
-                <button id="switchButton" type="submit">Full History</button>
-            </form>
+                <button id="switchButton" onclick="toggleHistory()">Toggle History</button>
         </div>
     </div>
     
     <script>
+
         document.querySelector('#option1').addEventListener('click', () => {
             submitAnswer('1');
             showThinkingNotification();
@@ -332,6 +365,31 @@
             submitAnswer('6');
             showThinkingNotification();
         });
+
+        document.querySelector('#switchButton').addEventListener('click', function() {
+            let historicalPromptsDiv = document.getElementById('historical_prompts');
+            let outerHistoricalPromptsDiv = document.getElementById('outer_historical_prompts');
+
+            // Toggle the display property for both divs
+            historicalPromptsDiv.style.display = (historicalPromptsDiv.style.display === 'none') ? 'block' : 'none';
+            outerHistoricalPromptsDiv.style.display = (outerHistoricalPromptsDiv.style.display === 'none') ? 'block' : 'none';
+        });
+        function toggleHistory(){
+            let historicalPromptsDiv = document.getElementById('historical_prompts');
+            let outerHistoricalPromptsDiv = document.getElementById('outer_historical_prompts');
+
+            // Toggle the display property for both divs
+            historicalPromptsDiv.style.display = (historicalPromptsDiv.style.display === 'none') ? 'block' : 'none';
+            outerHistoricalPromptsDiv.style.display = (outerHistoricalPromptsDiv.style.display === 'none') ? 'block' : 'none';
+        }
+        function goBackState(){
+            fetch(`/back`) // Send a GET request to the server with the selected answer
+                .then(response => response.json()) // Parse the JSON response
+                .then(data => {
+                    console.log("Doesn't Really Do Much")
+                })
+                .catch(error => console.error('Error submitting answer:', error));
+        }
 
         function submitAnswer(answer) {
             fetch(`/answer/${answer}`) // Send a GET request to the server with the selected answer
@@ -365,7 +423,9 @@
             // Assuming the entire answersList array is returned and the last item is the current prompt
             const promptContainer = document.querySelector('.current-prompt-container .prompt p');
             const optionsContainer = document.getElementById('options_text');
+            const historicalPromptContainer = document.querySelector('#historical_prompts')
             promptContainer.textContent = getPromptFromJSON(answersList[answersList.length - 1]);
+            historicalPromptContainer.innerHTML += `<div class="prompt old-prompt" ><p><b>This is an Appended Historical Prompt: ${getPromptFromJSON(answersList[answersList.length - 2])}</b></p></div>`
             optionsList = getOptionsFromJSON(answersList[answersList.length - 1])
             optionsContainer.innerHTML = ``;
             for (let i = 0; i < optionsList[i].length; i++) {

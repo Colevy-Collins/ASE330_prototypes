@@ -1,4 +1,10 @@
 Things to get done
-- updated prompt history to dynamically update
-- both files need to have prompt options display
+- (X) updated prompt history to dynamically update
+- (X) both files need to have prompt options display
 - *Maybe: back button accidentally sends back to current prompt while in prompt history
+
+Bugs
+- (X) Need to make back button appear with a reload
+- (X) /api/submitform needs to do a redirect
+- *Minimal: General inconsistenceis with previous prompt displays after using the back button After pressing back, prompt history shows most recent prompt that was generated when undoing your option.
+- (X) Prompt history display is a little strange

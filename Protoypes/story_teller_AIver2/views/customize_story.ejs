@@ -168,7 +168,7 @@
             </div>
             <br>
         <% }); %>
-        <button type="submit">Submit</button>
+        <button onclick="submitForm()">Submit</button>
         <button type="button" onclick="randomizeAndSubmit()">Randomize and Submit</button>
     </form>
 
@@ -191,6 +191,19 @@
             });
     
             document.getElementById('selectionsForm').submit();
+        }
+
+        function submitForm(){
+
+            // do your JS code here
+
+            // this line will trigger the submit and will send you to perform your code on the server
+            document.getElementById("selectionsForm").submit();
+            console.log("Form Submitted");
+            redirect();
+        }
+        function redirect() {
+            window.location.href = "http://localhost:3000/currentPrompt?";
         }
     </script>
 </body>

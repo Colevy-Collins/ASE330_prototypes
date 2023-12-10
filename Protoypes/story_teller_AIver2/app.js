@@ -4,7 +4,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const { OpenAI } = require('openai');
 
-const OPENAI_API_KEY = "";
+const OPENAI_API_KEY = "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";
 const client = new OpenAI({ apiKey: OPENAI_API_KEY });
 
 app.set('view engine', 'ejs');
@@ -158,9 +158,12 @@ app.post('/api/submit-form', async(req, res) => {
     await createAI()
     thread = await client.beta.threads.create();
     await traverseStory("start the story");
+    res.writeHead(301, {
+        Location: `http://localhost:3000/currentPrompt?`
+    }).end()
     res.render('currentPrompt', { answersList }); // Ensure answersList is passed here
     // res.render('currentPrompt', { temp }); // Ensure answersList is passed here
-    
+
 
 });
 

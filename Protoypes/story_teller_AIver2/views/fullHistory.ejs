@@ -272,23 +272,50 @@
     <% //console.log(promptText) %>
 </head>
 <body>
+<script>
+    //Populate options section when page is reloaded/reset
+    function firstOptionsLoad() {
+        fetch('/currentStoryStatus') // Endpoint to check if the story update is ready.
+            .then(response => response.json())
+            .then(data => {
+                if (data.storyReady) {
+                    const optionsContainer = document.getElementById('options_text');
+                    optionsList = getOptionsFromJSON(data.latestStorySegment)
+                    optionsContainer.innerHTML = ``;
+                    for (let i = 0; i < optionsList[i].length; i++) {
+                        optionsContainer.innerHTML += optionsList[i] + '<br>';//Update options text with newjson
+                    }
+                    console.log("load Page has ran")
+                } else {
+                    // If the story is not ready, we keep polling.
+                    setTimeout(checkForStoryUpdate, 2000); // Check again after 2 seconds.
+                }
+            })
+            .catch(error => console.error('Error fetching story status:', error));
+    }
+    firstOptionsLoad()
+
+</script>
     <div class="outer-container">
         <h1>VersaTale</h1>
         <div class="container current-prompt-container">
             <h2>Current Prompt</h2>
             <div class="prompt current-prompt">
                 <p><%= promptText %></p><br>
+                <p id="options_text">
+                    options
+                </p>
             </div>
         </div>
-        <div class="container prompt-container">
+        <div class="container prompt-container" id="historical_prompts">
             <h2>Prompt History</h2>
             <% for(let i = 0; i < answersList.length; i++) { %>
-                <div class="prompt old-prompt">
+                <div class="prompt old-prompt" >
                     <% let historicalPrompt = answersList[i].replace('\`\`\`json', ""); %>
                     <% let historicalPromptText = JSON.parse(historicalPrompt.replace('\`\`\`', ""))["prompt"] %>
-                    <% console.log(historicalPromptText) %>
                     <p><%= historicalPromptText %></p>
                 </div>
+
             <% } %>
         </div>
     </div>
@@ -375,7 +402,10 @@
             // Assuming the entire answersList array is returned and the last item is the current prompt
             const promptContainer = document.querySelector('.current-prompt-container .prompt p');
             const optionsContainer = document.getElementById('options_text');
+            const historicalPromptContainer = document.querySelector('#historical_prompts')
             promptContainer.textContent = getPromptFromJSON(answersList[answersList.length - 1]);
+            //historicalPromptContainer.innerHTML += `<p><b>This is an Appended Historical Prompt: </b></p>` + getPromptFromJSON(answersList[answersList.length - 1]) + "<br>"
+            $('#historical_prompts').load(document.URL +  ' #historical_prompts')
             optionsList = getOptionsFromJSON(answersList[answersList.length - 1])
             optionsContainer.innerHTML = ``;
             for (let i = 0; i < optionsList[i].length; i++) {
@@ -400,7 +430,10 @@
                         // If the story is ready, we'll refresh the displayed content.
                         const promptContainer = document.querySelector('.current-prompt-container .prompt p');
                         const optionsContainer = document.getElementById('options_text');
+                        const historicalPromptContainer = document.querySelector('#historical_prompts')
                         promptContainer.textContent = getPromptFromJSON(data.latestStorySegment); // Update the content with the latest segment from the server.
+                        historicalPromptContainer.innerHTML += `<div class="prompt old-prompt" id="historical_prompts">THIS IS ALL NEW TEXT ${getPromptFromJSON(data.latestStorySegment)}</div>`
+                        //$('#historical_prompts').load(document.URL +  ' #historical_prompts')
                         optionsList = getOptionsFromJSON(data.latestStorySegment)
                         optionsContainer.innerHTML = ``;
                         for (let i = 0; i < optionsList[i].length; i++) {

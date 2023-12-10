@@ -4,7 +4,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const { OpenAI } = require('openai');
 
-const OPENAI_API_KEY = "";
+const OPENAI_API_KEY = "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";
 const client = new OpenAI({ apiKey: OPENAI_API_KEY });
 
 app.set('view engine', 'ejs');
@@ -141,9 +141,12 @@ app.get('/', (req, res) => {
 });
 
 app.post('/api/submit-form', async(req, res) => {
+
+    // const temp = {1:`json { "prompt": "Engaging the Odyssey's advanced sensor array, you scrutinize the shifting patterns among the asteroids. The dynamic holographic display flickers with calculations as potential trajectories unfurl before you. Navigating this celestial labyrinth requires precision and a tactical approach. Each rock, varying from the size of a small shuttle to a sprawling metropolis, orbits in a dangerously unpredictable dance. The scanner locks onto a promising route, threading through the chaos with minimal risk but requiring a keen eye and steady hand at the helm.", "option1": "Take manual control and delicately pilot the Odyssey through the plotted path.", "option2": "Override the suggested route and create your own path, using the asteroid's gravity to slingshot the ship forward.", "option3": "Engage the automatic pilot to follow the plotted course, allowing you to prepare for any unforeseen encounters.", "option4": "Hesitate and reconsider your approach. Perhaps there's wisdom in seeking additional support at 'The Haven'.", "color1": "#2E82FF", "color2": "#F04E98", "color3": "#1BBF72", "color4": "#F5D300", "color5": "#9D00FF", "color6": "#FF6F61" }`}
     // Extract selector values
     for (let i = 1; i <= 4; i++) {
         const selectorKey = `selector${i}`;
+
         if(req.body.hasOwnProperty(selectorKey)) {
             selectedOptions[selectorKey] = req.body[selectorKey];
         } else {
@@ -156,6 +159,7 @@ app.post('/api/submit-form', async(req, res) => {
     thread = await client.beta.threads.create();
     await traverseStory("start the story");
     res.render('currentPrompt', { answersList }); // Ensure answersList is passed here
+    // res.render('currentPrompt', { temp }); // Ensure answersList is passed here
     
 
 });

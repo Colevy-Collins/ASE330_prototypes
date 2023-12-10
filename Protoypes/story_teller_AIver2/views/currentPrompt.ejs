@@ -233,6 +233,12 @@
         }
 
     </style>
+    <% item = answersList[0].replace('\`\`\`json', ""); %>
+    <% let promptText = JSON.parse(item.replace('\`\`\`', ""))["prompt"] %>
+    <% let jsonObject = JSON.parse(item.replace('\`\`\`', "")) %>
+    <% let optionKeys = Object.keys(jsonObject).filter(key => key.startsWith('option')); %>
+    <% let numberOfOptions = optionKeys.length %>
+    <% //console.log(promptText) %>
 </head>
 <body>
     <div class="outer-container">
@@ -240,7 +246,10 @@
         <div class="container current-prompt-container">
             <h2>Current Prompt</h2>
             <div class="prompt current-prompt">
-                <p><%= answersList[(answersList.length - 1)] %></p>
+                <p><%= promptText %></p><br>
+                <p id="options_text">
+                    options
+                </p>
             </div>
         </div>
         
@@ -249,8 +258,13 @@
         <div class="button-group-left">
             <!-- "Yes" and "No" buttons -->
             <% if (1 === 1) { %> <!-- check to "the end text. add later" -->
-                    <button id="yesButton" type="submit">1</button>
-                    <button id="noButton" type="submit">2</button>
+                    <button class="option_button" id="yesButton" type="submit">1</button>
+                    <button class="option_button" id="noButton" type="submit">2</button>
+            <% } %>
+            <% for (let i = 1; i <= optionKeys.length; i++) { %>
+                <button class="option_button" id="option_b">
+                    <%= i %>
+                </button>
             <% } %>
         </div>
 
@@ -278,6 +292,10 @@
             submitAnswer('2');
             showThinkingNotification();
         });
+        document.querySelector('#button').addEventListener('click', () => {
+            submitAnswer('2');
+            showThinkingNotification();
+        });
 
         function submitAnswer(answer) {
             fetch(`/answer/${answer}`) // Send a GET request to the server with the selected answer
@@ -289,12 +307,37 @@
                 })
                 .catch(error => console.error('Error submitting answer:', error));
         }
+        function getPromptFromJSON(jsonString) {
+            let item = jsonString.replace('\`\`\`json', "");
+            item = item.replace('\`\`\`', "")
+            item = item.trim()
+            item = JSON.parse(item)["prompt"]
+            return item
+        }
 
+        function getOptionsFromJSON(jsonString) {
+            let item = jsonString.replace('\`\`\`json', "");
+            jsonObject = JSON.parse(item.replace('\`\`\`', ""))
+            const optionKeys = Object.keys(jsonObject).filter(key => key.startsWith('option'));
+            let options = []
+            for (let i = 0; i < optionKeys.length; i++){
+                options.push(`${optionKeys[i].toUpperCase()}: ${jsonObject[optionKeys[i]]}`)
+            }
+            return options
+        }
         function updatePrompt(answersList) {
             // Assuming the entire answersList array is returned and the last item is the current prompt
             const promptContainer = document.querySelector('.current-prompt-container .prompt p');
-            promptContainer.textContent = answersList[answersList.length - 1];
+            const optionsContainer = document.getElementById('options_text');
+            promptContainer.textContent = getPromptFromJSON(answersList[answersList.length - 1]);
+            optionsList = getOptionsFromJSON(answersList[answersList.length - 1])
+            optionsContainer.innerHTML = ``;
+            for (let i = 0; i < optionsList[i].length; i++) {
+                optionsContainer.innerHTML += optionsList[i] + '<br>';//Update options text with newjson
+            }
+            //console.log(`New Options: ${getOptionsFromJSON(answersList[answersList.length - 1])}`)
         }
+
         // This function checks the server for updates and refreshes the page content accordingly.
         function checkForStoryUpdate() {
             fetch('/currentStoryStatus') // Endpoint to check if the story update is ready.
@@ -303,7 +346,13 @@
                     if (data.storyReady) {
                         // If the story is ready, we'll refresh the displayed content.
                         const promptContainer = document.querySelector('.current-prompt-container .prompt p');
-                        promptContainer.textContent = data.latestStorySegment; // Update the content with the latest segment from the server.
+                        const optionsContainer = document.getElementById('options_text');
+                        promptContainer.textContent = getPromptFromJSON(data.latestStorySegment); // Update the content with the latest segment from the server.
+                        optionsList = getOptionsFromJSON(data.latestStorySegment)
+                        optionsContainer.innerHTML = ``;
+                        for (let i = 0; i < optionsList[i].length; i++) {
+                            optionsContainer.innerHTML += optionsList[i] + '<br>';//Update options text with newjson
+                        }
                     } else {
                         // If the story is not ready, we keep polling.
                         setTimeout(checkForStoryUpdate, 2000); // Check again after 2 seconds.

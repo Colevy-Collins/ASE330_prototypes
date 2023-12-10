@@ -190,12 +190,38 @@
             background: linear-gradient(to bottom, #8fd3f4, #84fab0); /* Gradient background */
         }
 
+        .option_button {
+            margin: 0 10px;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            color: #000; /* Black text color */
+            font-family: 'Merriweather', serif; /* Serif font for button text */
+            font-weight: 700; /* Bold font weight */
+            letter-spacing: 1.2px; /* Letter spacing */
+            box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.15);
+            background: linear-gradient(to bottom, #8fd3f4, #84fab0); /* Gradient background */
+        }
+
         #yesButton:hover, #noButton:hover {
             transform: translateY(-4px);
             box-shadow: 0px 7px 12px rgba(0, 0, 0, 0.3);
         }
 
         #yesButton:active, #noButton:active {
+            transform: translateY(-1px);
+            box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .option_button:hover, #noButton:hover {
+            transform: translateY(-4px);
+            box-shadow: 0px 7px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .option_button:active, #noButton:active {
             transform: translateY(-1px);
             box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.2);
         }
@@ -262,7 +288,7 @@
                     <button class="option_button" id="noButton" type="submit">2</button>
             <% } %>
             <% for (let i = 1; i <= optionKeys.length; i++) { %>
-                <button class="option_button" id="option_b">
+                <button class="option_button" id=`option<%= i %>` type="submit">
                     <%= i %>
                 </button>
             <% } %>
@@ -283,17 +309,28 @@
     </div>
     
     <script>
-        document.querySelector('#yesButton').addEventListener('click', () => {
+        document.querySelector('#option1').addEventListener('click', () => {
             submitAnswer('1');
             showThinkingNotification();
         });
-
-        document.querySelector('#noButton').addEventListener('click', () => {
+        document.querySelector('#option2').addEventListener('click', () => {
             submitAnswer('2');
             showThinkingNotification();
         });
-        document.querySelector('#button').addEventListener('click', () => {
-            submitAnswer('2');
+        document.querySelector('#option3').addEventListener('click', () => {
+            submitAnswer('3');
+            showThinkingNotification();
+        });
+        document.querySelector('#option4').addEventListener('click', () => {
+            submitAnswer('4');
+            showThinkingNotification();
+        });
+        document.querySelector('#option5').addEventListener('click', () => {
+            submitAnswer('5');
+            showThinkingNotification();
+        });
+        document.querySelector('#option6').addEventListener('click', () => {
+            submitAnswer('6');
             showThinkingNotification();
         });
 
@@ -392,8 +429,12 @@
 }
 
 // Attach the notification function to the Yes and No buttons
-document.querySelector('#yesButton').addEventListener('click', showThinkingNotification);
-document.querySelector('#noButton').addEventListener('click', showThinkingNotification);
+document.querySelector('#option1').addEventListener('click', showThinkingNotification);
+document.querySelector('#option2').addEventListener('click', showThinkingNotification);
+document.querySelector('#option3').addEventListener('click', showThinkingNotification);
+document.querySelector('#option4').addEventListener('click', showThinkingNotification);
+document.querySelector('#option5').addEventListener('click', showThinkingNotification);
+document.querySelector('#option6').addEventListener('click', showThinkingNotification);
     </script>
 </body>
 </html>

@@ -4,7 +4,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const { OpenAI } = require('openai');
 
-const OPENAI_API_KEY = "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";
+const OPENAI_API_KEY = "";
 const client = new OpenAI({ apiKey: OPENAI_API_KEY });
 
 app.set('view engine', 'ejs');
@@ -95,6 +95,7 @@ async function createAI() {
             15. provide output only in a json object with the attributes for the prompt which holds all the text of the story, each option and colors that has colors for html attributes. There should be 6 colors for the web page that are vibrant and ${selectedOptions[1]} themed. The json object should have a "prompt", "optionX" where X is the number for the option, "color1", "color1", "color2", "color3", "color4", "color5", "color6".
             16. Each prompt should be ${selectedOptions.selector4}. 
             17. provide output only in a json object with the attributes for the prompt which holds all the text of the story, each option and colors that has colors for html attributes. There should be 6 colors for the web page that are vibrant and space themed. The json object should have a "prompt", "optionX" where X is the number for the option, "color1", "color1", "color2", "color3", "color4", "color5", "color6".
+            18. when the sotry is over state to the user that the story has concluded.
             `,
             model: "gpt-4-1106-preview",
           });

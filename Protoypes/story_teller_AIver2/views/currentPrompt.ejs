@@ -259,7 +259,7 @@
         }
 
     </style>
-    <% item = answersList[0].replace('\`\`\`json', ""); %>
+    <% item = answersList[answersList.length - 1].replace('\`\`\`json', ""); %>
     <% console.log(item.replace('\`\`\`', "")) %>
     <% let promptText = JSON.parse(item.replace('\`\`\`', ""))["prompt"] %>
     <% let jsonObject = JSON.parse(item.replace('\`\`\`', "")) %>

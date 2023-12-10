@@ -371,6 +371,13 @@
             for (let i = 0; i < optionsList[i].length; i++) {
                 optionsContainer.innerHTML += optionsList[i] + '<br>';//Update options text with newjson
             }
+            if(getPromptFromJSON(answersList[answersList.length - 1]).includes("story has concluded")){
+                const buttonsToHide = document.querySelectorAll('.option_button')
+                const moreButtonsToHide = document.querySelectorAll('#back_button')
+                buttonsToHide.forEach(button => {
+                    button.style.display = 'none';
+                });
+            }
             //console.log(`New Options: ${getOptionsFromJSON(answersList[answersList.length - 1])}`)
         }
 

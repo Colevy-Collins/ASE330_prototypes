@@ -1,0 +1,4 @@
+Things to get done
+- updated prompt history to dynamically update
+- both files need to have prompt options display
+- *Maybe: back button accidentally sends back to current prompt while in prompt history

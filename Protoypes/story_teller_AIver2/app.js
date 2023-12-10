@@ -4,7 +4,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const { OpenAI } = require('openai');
 
-const OPENAI_API_KEY = "";
+const OPENAI_API_KEY = "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";
 const client = new OpenAI({ apiKey: OPENAI_API_KEY });
 
 app.set('view engine', 'ejs');

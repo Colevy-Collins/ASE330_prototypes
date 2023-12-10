@@ -197,6 +197,32 @@
             box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.2);
         }
 
+        .option_button:hover, #noButton:hover {
+            transform: translateY(-4px);
+            box-shadow: 0px 7px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .option_button:active, #noButton:active {
+            transform: translateY(-1px);
+            box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .option_button {
+            margin: 0 10px;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            color: #000; /* Black text color */
+            font-family: 'Merriweather', serif; /* Serif font for button text */
+            font-weight: 700; /* Bold font weight */
+            letter-spacing: 1.2px; /* Letter spacing */
+            box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.15);
+            background: linear-gradient(to bottom, #8fd3f4, #84fab0); /* Gradient background */
+        }
+
 	/* Style for the "Back" button */
 	#backButton, #switchButton {
 	    background-color: #e1e1e1; /* Different background color to distinguish it from "Yes/No" buttons */
@@ -238,6 +264,12 @@
         }
 
     </style>
+    <% item = answersList[0].replace('\`\`\`json', ""); %>
+    <% let promptText = JSON.parse(item.replace('\`\`\`', ""))["prompt"] %>
+    <% let jsonObject = JSON.parse(item.replace('\`\`\`', "")) %>
+    <% let optionKeys = Object.keys(jsonObject).filter(key => key.startsWith('option')); %>
+    <% let numberOfOptions = optionKeys.length %>
+    <% //console.log(promptText) %>
 </head>
 <body>
     <div class="outer-container">
@@ -245,49 +277,70 @@
         <div class="container current-prompt-container">
             <h2>Current Prompt</h2>
             <div class="prompt current-prompt">
-                <p><%= answersList[(answersList.length - 1)] %></p>
+                <p><%= promptText %></p><br>
             </div>
         </div>
         <div class="container prompt-container">
             <h2>Prompt History</h2>
             <% for(let i = 0; i < answersList.length; i++) { %>
                 <div class="prompt old-prompt">
-                    <p><%= answersList[i] %></p>
+                    <% let historicalPrompt = answersList[i].replace('\`\`\`json', ""); %>
+                    <% let historicalPromptText = JSON.parse(historicalPrompt.replace('\`\`\`', ""))["prompt"] %>
+                    <% console.log(historicalPromptText) %>
+                    <p><%= historicalPromptText %></p>
                 </div>
             <% } %>
         </div>
     </div>
-    <% if (1 === 1) { %> <!-- check to "the end text. add later" -->
-        <div class="buttons">
-            <div class="button-group">
-                <!-- "Yes" and "No" answer buttons -->
-                    <button id="yesButton" type="submit">1</button>
-                    <button id="noButton" type="submit">2</button>
-            </div>
-            <div class="button-group">
-                <% if (answersList.length > 1) { %>
-                    <!-- "Back" button -->
-                    <form action="/back" method="get">
-                        <button id="backButton" type="submit">Back</button>
-                    </form>
-                <% } %>
-
-                <!-- "Current Prompt" button -->
-                <form action="/currentPrompt" method="get">
-                    <button id="switchButton" type="submit">Current Prompt</button>
-                </form>
-            </div>
+    <!-- Buttons section -->
+    <div class="buttons">
+        <div class="button-group-left">
+            <% if (1 === 1) { %> <!-- check to "the end text. add later" -->
+            <% for (let i = 1; i <= optionKeys.length; i++) { %>
+                <button class="option_button" id='option<%= i %>' type="submit">
+                    <%= i %>
+                </button>
+            <% } %>
+            <% } %>
         </div>
-    <% } %>
+
+        <div class="button-group-right">
+            <% if (answersList.length > 1) { %>
+                <!-- "Back" button -->
+                <form action="/back" method="get">
+                    <button id="backButton" type="submit">Back</button>
+                </form>
+            <% } %>
+            <!-- "Full History" button -->
+            <form action="/fullHistory" method="get">
+                <button id="switchButton" type="submit">Full History</button>
+            </form>
+        </div>
+    </div>
 
     <script>
-        document.querySelector('#yesButton').addEventListener('click', () => {
+        document.querySelector('#option1').addEventListener('click', () => {
             submitAnswer('1');
             showThinkingNotification();
         });
-
-        document.querySelector('#noButton').addEventListener('click', () => {
+        document.querySelector('#option2').addEventListener('click', () => {
             submitAnswer('2');
+            showThinkingNotification();
+        });
+        document.querySelector('#option3').addEventListener('click', () => {
+            submitAnswer('3');
+            showThinkingNotification();
+        });
+        document.querySelector('#option4').addEventListener('click', () => {
+            submitAnswer('4');
+            showThinkingNotification();
+        });
+        document.querySelector('#option5').addEventListener('click', () => {
+            submitAnswer('5');
+            showThinkingNotification();
+        });
+        document.querySelector('#option6').addEventListener('click', () => {
+            submitAnswer('6');
             showThinkingNotification();
         });
 
@@ -301,11 +354,34 @@
                 })
                 .catch(error => console.error('Error submitting answer:', error));
         }
-
+        function getPromptFromJSON(jsonString) {
+            let item = jsonString.replace('\`\`\`json', "");
+            item = item.replace('\`\`\`', "")
+            item = item.trim()
+            item = JSON.parse(item)["prompt"]
+            return item
+        }
+        function getOptionsFromJSON(jsonString) {
+            let item = jsonString.replace('\`\`\`json', "");
+            jsonObject = JSON.parse(item.replace('\`\`\`', ""))
+            const optionKeys = Object.keys(jsonObject).filter(key => key.startsWith('option'));
+            let options = []
+            for (let i = 0; i < optionKeys.length; i++){
+                options.push(`${optionKeys[i].toUpperCase()}: ${jsonObject[optionKeys[i]]}`)
+            }
+            return options
+        }
         function updatePrompt(answersList) {
             // Assuming the entire answersList array is returned and the last item is the current prompt
             const promptContainer = document.querySelector('.current-prompt-container .prompt p');
-            promptContainer.textContent = answersList[answersList.length - 1];
+            const optionsContainer = document.getElementById('options_text');
+            promptContainer.textContent = getPromptFromJSON(answersList[answersList.length - 1]);
+            optionsList = getOptionsFromJSON(answersList[answersList.length - 1])
+            optionsContainer.innerHTML = ``;
+            for (let i = 0; i < optionsList[i].length; i++) {
+                optionsContainer.innerHTML += optionsList[i] + '<br>';//Update options text with newjson
+            }
+            //console.log(`New Options: ${getOptionsFromJSON(answersList[answersList.length - 1])}`)
         }
         // This function checks the server for updates and refreshes the page content accordingly.
         function checkForStoryUpdate() {
@@ -315,7 +391,13 @@
                     if (data.storyReady) {
                         // If the story is ready, we'll refresh the displayed content.
                         const promptContainer = document.querySelector('.current-prompt-container .prompt p');
-                        promptContainer.textContent = data.latestStorySegment; // Update the content with the latest segment from the server.
+                        const optionsContainer = document.getElementById('options_text');
+                        promptContainer.textContent = getPromptFromJSON(data.latestStorySegment); // Update the content with the latest segment from the server.
+                        optionsList = getOptionsFromJSON(data.latestStorySegment)
+                        optionsContainer.innerHTML = ``;
+                        for (let i = 0; i < optionsList[i].length; i++) {
+                            optionsContainer.innerHTML += optionsList[i] + '<br>';//Update options text with newjson
+                        }
                     } else {
                         // If the story is not ready, we keep polling.
                         setTimeout(checkForStoryUpdate, 2000); // Check again after 2 seconds.
@@ -355,8 +437,12 @@
 }
 
 // Attach the notification function to the Yes and No buttons
-document.querySelector('#yesButton').addEventListener('click', showThinkingNotification);
-document.querySelector('#noButton').addEventListener('click', showThinkingNotification);
+document.querySelector('#option1').addEventListener('click', showThinkingNotification);
+document.querySelector('#option2').addEventListener('click', showThinkingNotification);
+document.querySelector('#option3').addEventListener('click', showThinkingNotification);
+document.querySelector('#option4').addEventListener('click', showThinkingNotification);
+document.querySelector('#option5').addEventListener('click', showThinkingNotification);
+document.querySelector('#option6').addEventListener('click', showThinkingNotification);
     </script>
 </body>
 </html>

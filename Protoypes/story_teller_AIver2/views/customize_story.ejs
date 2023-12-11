@@ -155,8 +155,9 @@
             <p>How many story options would you like?</p>
             <select id="selector1" name="selector1">
                 <option value="2">2</option>
+                <option value="3">3</option>
                 <option value="4">4</option>
-                <option value="6">6</option>
+                <option value="5">5</option>
             </select>
         </div>
 
@@ -213,7 +214,7 @@ function disableButtonsAndShowLoading() {
     
         function randomizeAndSubmit() {
             const selectors = [
-                { id: 1, options: ['2', '4', '6'] },
+                { id: 1, options: ['2', '3', '4', '5'] },
                 { id: 2, options: ['space', 'modern', 'medieval', 'fantasy'] },
                 { id: 3, options: ['true crime', 'action and adventure', 'mystery', 'horror'] },
                 { id: 4, options: ['short', 'detailed', 'extremely detailed'] }

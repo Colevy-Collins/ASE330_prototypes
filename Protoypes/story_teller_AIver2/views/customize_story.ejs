@@ -3,172 +3,179 @@
 <head>
     <title>Selectors Form</title>
 
-    <style>
-        @keyframes gradientBG {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
-        }
+<style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
     
-            body {
-                font-family: 'Arial', sans-serif;
-                background: linear-gradient(135deg, #f6d365, #fda085, #f06292, #8c9eff, #536dfe, #3d5afe, #304ffe, #2196f3, #00bcd4, #009688, #4caf50#ffeb3b, #ffc107, #ff9800, #ff5722, #795548, #607d8b, #cddc39, #8bc34a, #4caf50, #009688, #00bcd4, #2196f3, #3f51b5, #673ab7, #9c27b0, #e91e63, #f44336, #b71c1c, #ff6f61, #45aaf2);
-                background-size: 1200% 1200%;
-                color: #333;
-                padding: 20px;
-                margin: 0;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                height: 100vh;
-                box-sizing: border-box;
-                overflow: hidden; /* Make sure that the shapes don't cause scrollbars */
-                position: relative; /* Needed to absolutely position the pseudo-elements */
-    
-            }
-    
-            body:hover {
-                animation: gradientBG 30s ease infinite;
-            }
-    
-            form {
-                background: white;
-                padding: 40px;
-                border-radius: 8px;
-                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-                max-width: 400px;
-                width: 100%;
-                transition: box-shadow 0.3s, transform 0.3s;
-            }
-    
-            form:hover {
-                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-                transform: scale(1.02);
-            }
-    
-       h1 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #ffffff; /* White text */
-            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.8); /* Dark text shadow for contrast */
-            /* The gradient animation is removed from the text */
-        }
-    
-            div {
-                margin-bottom: 10px;
-            }
-    
-            select {
-                width: 100%;
-                padding: 10px;
-                border: 1px solid #ddd;
-                border-radius: 4px;
-                box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.2);
-                background: white;
-                transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s;
-            }
-    
-            select:hover, select:focus {
-                background-color: #e0e0e0;
-                box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3);
-                transform: scale(1.05);
-            }
-    
-            button {
-                padding: 10px 20px;
-                border: none;
-                border-radius: 4px;
-                margin-top: 10px;
-                cursor: pointer;
-                transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
-                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-                position: relative;
-                overflow: hidden;
-            }
-    
-            button[type=submit] {
-                background: #4CAF50;
-                color: white;
-            }
-    
-            button[type=button] {
-                background: #f44336;
-                color: white;
-            }
-    
-            button:hover {
-                background-color: #45a049;
-                box-shadow: 0px 6px 12px rgba(0, 100, 0, 0.4);
-                transform: translateY(-4px);
-            }
-    
-            button[type=button]:hover {
-                background-color: #d32f2f;
-                box-shadow: 0px 6px 12px rgba(200, 0, 0, 0.4);
-                transform: translateY(-4px);
-            }
-    
-            button:active {
-                transform: scale(0.96);
-                box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-            }
-    
-            button::before {
-                content: '';
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                width: 300%;
-                height: 300%;
-                background-color: #fff;
-                transition: width 0.3s, height 0.3s, top 0.3s, left 0.3s;
-                border-radius: 50%;
-                z-index: 0;
-                opacity: 0.5;
-                transform: translate(-50%, -50%);
-            }
-    
-            button:hover::before {
-                width: 0;
-                height: 0;
-                top: 50%;
-                left: 50%;
-                opacity: 0;
-            }
-        </style>
+    body {
+        font-family: 'Arial', sans-serif;
+        color: #333;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;   
+        min-height: 155vh;
+        overflow-x: hidden; /* Prevents horizontal scrolling */
+        overflow-y: auto; /* Allows vertical scrolling as needed */
+
+        /* Animation for background color */
+        animation: backgroundChange 50s linear infinite;
+    }
+
+    @keyframes backgroundChange {
+        0%   {background: #FF9A8B;} /* reddish pink */
+        10%  {background: #FFD382;} /* soft orange */
+        20%  {background: #FFFF85;} /* light yellow */
+        30%  {background: #C4FFD7;} /* mint */
+        40%  {background: #8EE4FF;} /* sky blue */
+        50%  {background: #C58BFF;} /* lavender */
+        60%  {background: #EB76FF;} /* magenta */
+        70%  {background: #FF76BC;} /* pink */
+        80%  {background: #85FFC7;} /* aqua */
+        90%  {background: #FF9B6A;} /* salmon */
+        100% {background: #FF9A8B;} /* reddish pink */
+    }
+
+    h1 {
+        font-family: 'Trebuchet MS', sans-serif;
+        font-size: 2.5rem;
+        color: #444;
+        text-transform: uppercase;
+        margin-bottom: 5px;
+        text-shadow: 3px 3px 1px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+        font-family: 'Trebuchet MS', sans-serif;
+        font-size: 2.5rem;
+        color: #444;
+        text-transform: uppercase;
+        margin-bottom: 5px;
+        text-shadow: 3px 3px 1px rgba(0, 0, 0, 0.1);
+    }
+
+    .selector-container {
+        margin: 20px auto;
+        background: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.2);
+        max-width: 400px;
+        transition: transform 0.3s ease;
+    }
+
+    .selector-container:hover {
+        transform: scale(1.05);
+    }
+
+    label {
+        font-weight: bold;
+        color: #555;
+        display: block;
+        text-shadow: 2px 2px 1px rgba(0, 0, 0, 0.1);
+        margin-bottom: 5px;
+    }
+
+    select {
+        width: calc(100% - 22px);
+        padding: 10px;
+        border: 3px solid #ccc;
+        border-radius: 5px;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+        font-size: 1rem;
+        background-color: #fafafa;
+        cursor: pointer;
+        transition: border-color 0.3s ease;
+        appearance: none; /* Removes default styling provided by the browser */
+        -webkit-appearance: none;
+        -moz-appearance: none;
+    }
+
+    select:hover, select:focus {
+        border-color: #88aaff;
+    }
+
+    button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border: none;
+        border-radius: 5px;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    button:hover {
+        background-color: #45a049;
+        box-shadow: 0 0 15px 3px white;
+    }
+
+    .button-container {
+        margin-top: 20px;
+    }
+</style>
         
 </head>
 <body>
-    <h1>Please make your selections</h1>
+    <h1>Customize Your Story</h1>
+    <h2>Please Make Your Selections</h2>
     <form id="selectionsForm" action="/api/submit-form" method="post">
-        <% 
-        const selectors = [
-            { id: 1, name: 'option_count', description: 'How many story options would you like?', options: ['2', '4', '6'] },
-            { id: 2, name: 'theme', description: 'What theme whould you like?', options: ['space', 'modern', 'medieval', 'fantasy'] },
-            { id: 3, name: 'genre', description: 'What genre would you like?', options: ['true crime', 'action and adventure', 'mystery ', 'horror'] },
-            { id: 4, name: 'length', description: 'How long would you like your prompts?', options: ['strength forward', 'detailed', 'extremely detailed'] }
-        ];
-        selectors.forEach(selector => {
-        %>
-            <div>
-                <strong><%= selector.name %>:</strong>
-                <p><%= selector.description %></p>
-                <select id="selector<%= selector.id %>" name="selector<%= selector.id %>">
-                    <% selector.options.forEach(option => { %>
-                        <option value="<%= option %>"><%= option %></option>
-                    <% }); %>
-                </select>
-            </div>
-            <br>
-        <% }); %>
-        <button onclick="submitForm()">Submit</button>
-        <button type="button" onclick="randomizeAndSubmit()">Randomize and Submit</button>
+        <div class="selector-container">
+            <label for="selector1"><strong>Option Count:</strong></label>
+            <p>How many story options would you like?</p>
+            <select id="selector1" name="selector1">
+                <option value="2">2</option>
+                <option value="4">4</option>
+                <option value="6">6</option>
+            </select>
+        </div>
+
+        <div class="selector-container">
+            <label for="selector2"><strong>Theme:</strong></label>
+            <p>What theme would you like?</p>
+            <select id="selector2" name="selector2">
+                <option value="space">Space</option>
+                <option value="modern">Modern</option>
+                <option value="medieval">Medieval</option>
+                <option value="fantasy">Fantasy</option>
+            </select>
+        </div>
+
+        <div class="selector-container">
+            <label for="selector3"><strong>Genre:</strong></label>
+            <p>What genre would you like?</p>
+            <select id="selector3" name="selector3">
+                <option value="true crime">True Crime</option>
+                <option value="action and adventure">Action and Adventure</option>
+                <option value="mystery">Mystery</option>
+                <option value="horror">Horror</option>
+            </select>
+        </div>
+
+        <div class="selector-container">
+            <label for="selector4"><strong>Length:</strong></label>
+            <p>How long would you like your prompts?</p>
+            <select id="selector4" name="selector4">
+                <option value="short">Short</option>
+                <option value="detailed">Detailed</option>
+                <option value="extremely detailed">Extremely Detailed</option>
+            </select>
+        </div>
+
+        <div class="button-container">
+            <button type="submit" onclick="submitForm()">Submit</button>
+            <button type="button" onclick="randomizeAndSubmit()">Randomize and Submit</button>
+        </div>
     </form>
 
     <script type="text/javascript">

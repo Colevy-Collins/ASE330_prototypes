@@ -4,7 +4,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const { OpenAI } = require('openai');
 
-const OPENAI_API_KEY = "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";
+const OPENAI_API_KEY = "";
 const client = new OpenAI({ apiKey: OPENAI_API_KEY });
 
 app.set('view engine', 'ejs');
@@ -120,13 +120,9 @@ async function goBack() {
 
 // And update the back button routes:
 app.get('/back', (req, res) => {
-    if (answersList.length > 1){
+    if (isTraverseStoryRunning == false) {
         goBack(); // Call goBack function to update currentNode and answersList
-        res.json({ answersList })
-    }
-    else{
-        const newNotification = { id: notifications.length + 1, message: "There is no previous prompts to go back to" };
-        notifications.push(newNotification);
+        res.render('currentPrompt', { answersList });
     }
 });
 
@@ -168,7 +164,6 @@ app.post('/api/submit-form', async(req, res) => {
 
 
 });
-
 app.get('/answer/:answer', async (req, res) => {
     const answer = req.params.answer.toLowerCase();
 
@@ -191,6 +186,10 @@ app.get('/answer/:answer', async (req, res) => {
     }
 });
 
+app.get('/answerlist', async (req, res) => {
+    res.json({ answersList });
+});
+
 
 // Helper function to validate the user's answer.
 // You need to define what constitutes a valid answer in your case.
@@ -205,23 +204,6 @@ app.get('/currentStoryStatus', (req, res) => {
         storyReady: !isTraverseStoryRunning,
         latestStorySegment: answersList[answersList.length - 1] // Latest story segment.
     });
-});
-
-// Simulated notifications data
-let notifications = [
-];
-
-// API endpoint to fetch notifications
-app.get('/api/notifications', (req, res) => {
-    // Get the latest notification
-    const latestNotification = notifications.pop();
-
-    // If there is a new notification, send it; otherwise, send an empty response
-    if (latestNotification) {
-        res.json({ message: latestNotification.message });
-    } else {
-        res.json({ message: '' });
-    }
 });
 
 app.listen(3000, async () => {

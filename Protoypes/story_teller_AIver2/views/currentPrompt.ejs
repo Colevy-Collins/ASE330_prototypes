@@ -19,7 +19,6 @@
             font-family: 'Merriweather', serif; /* Add a serif font for body text */
             color: #34495e; /* Deep blue color */
             padding-bottom: 100px; /* Height of the button container plus additional space */
-            transition: background-color 2s;
         }
 
         .outer-container {
@@ -284,11 +283,8 @@
                     }
                     console.log("load Page has ran")
                 } else {
-                    // Start cycling colors
-                    updateBackgroundColor();
                     // If the story is not ready, we keep polling.
                     setTimeout(checkForStoryUpdate, 2000); // Check again after 2 seconds.
-                    
                 }
             })
             .catch(error => console.error('Error fetching story status:', error));
@@ -337,15 +333,11 @@
 
         <div class="button-group-right">
                 <!-- "Back" button -->
-                <button id="backButton" type="submit" onclick="handleButtonClick()">Back</button>
-
-
+                    <button id="backButton" type="submit" onclick="redirect(); <% if (answersList.length > 1) { %> goBackState() <% } %>">Back</button>
             <!-- "Full History" button -->
                 <button id="switchButton" onclick="toggleHistory()">Toggle History</button>
         </div>
     </div>
-
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     
     <script>
 
@@ -382,44 +374,6 @@
             historicalPromptsDiv.style.display = (historicalPromptsDiv.style.display === 'none') ? 'block' : 'none';
             outerHistoricalPromptsDiv.style.display = (outerHistoricalPromptsDiv.style.display === 'none') ? 'block' : 'none';
         });
-
-        function handleButtonClick() {
-            if (answersList.length > 1) {
-                goBackState();
-                checkForStoryUpdate();
-             } 
-        }
-
-            // Function to handle the AJAX request
-    function fetchData() {
-        $.ajax({
-            url: '/api/notification',
-            method: 'GET',
-            success: function (data) {
-                // Display the notification to the user
-                if (data.message) {
-                    alert(data.message);
-                }
-            },
-            error: function (error) {
-                console.error('Error fetching data:', error);
-            }
-        });
-    }
-
-    // Function to periodically check for notifications
-    function checkForNotifications() {
-        // Adjust the interval (in milliseconds) based on your needs
-        setInterval(function () {
-            fetchData();
-        }, 5000); // Check every 5 seconds, for example
-    }
-
-    // Call the checkForNotifications function when the page loads
-    $(document).ready(function () {
-        checkForNotifications();
-    });
-
         function toggleHistory(){
             let historicalPromptsDiv = document.getElementById('historical_prompts');
             let outerHistoricalPromptsDiv = document.getElementById('outer_historical_prompts');
@@ -465,24 +419,17 @@
             }
             return options
         }
-
-        function getColorsFromJSON(jsonString) {
-            let item = jsonString.replace('\`\`\`json', "");
-            jsonObject = JSON.parse(item.replace('\`\`\`', ""))
-            const colorKeys = Object.keys(jsonObject).filter(key => key.startsWith('color'));
-            let color = []
-            for (let i = 0; i < colorKeys.length; i++){
-                color.push(`${colorKeys[i].toUpperCase()}: ${jsonObject[colorKeys[i]]}`)
-            }
-            return color
-        }
         function updatePrompt(answersList) {
             // Assuming the entire answersList array is returned and the last item is the current prompt
             const promptContainer = document.querySelector('.current-prompt-container .prompt p');
             const optionsContainer = document.getElementById('options_text');
             const historicalPromptContainer = document.querySelector('#historical_prompts')
             promptContainer.textContent = getPromptFromJSON(answersList[answersList.length - 1]);
-            historicalPromptContainer.innerHTML += `<div class="prompt old-prompt" ><p><b>This is an Appended Historical Prompt: ${getPromptFromJSON(answersList[answersList.length - 2])}</b></p></div>`
+            historicalPromptContainer.innerHTML = '';
+            
+            for(let f = 0; f < (answersList.length - 1); f++){
+                historicalPromptContainer.innerHTML += `<div class="prompt old-prompt" ><p><b>${getPromptFromJSON(answersList[f])}</b></p></div>`
+            }
             optionsList = getOptionsFromJSON(answersList[answersList.length - 1])
             optionsContainer.innerHTML = ``;
             for (let i = 0; i < optionsList[i].length; i++) {
@@ -497,6 +444,27 @@
             }
             //console.log(`New Options: ${getOptionsFromJSON(answersList[answersList.length - 1])}`)
         }
+
+                // Function to update the display
+function updatePromptDisplay() {
+    // Clear the previous prompts
+    const historicalPromptsContainer = document.getElementById('historical_prompts');
+    historicalPromptsContainer.innerHTML = '';
+
+    // Repopulate the prompts
+    for(let i = 0; i < answersList.length - 1; i++) {
+        const historicalPrompt = answersList[i].replace('```json', "");
+        const historicalPromptText = JSON.parse(historicalPrompt.replace('```', ""))["prompt"];
+
+        const promptDiv = document.createElement('div');
+        promptDiv.className = 'prompt old-prompt';
+        const promptParagraph = document.createElement('p');
+        promptParagraph.textContent = historicalPromptText;
+
+        promptDiv.appendChild(promptParagraph);
+        historicalPromptsContainer.appendChild(promptDiv);
+    }
+}
 
         // This function checks the server for updates and refreshes the page content accordingly.
         function checkForStoryUpdate() {
@@ -550,25 +518,6 @@
          }
      }, 5000);
 }
-
-// Extract only the color values:
-var backgroundColors = getOptionsFromJSON(answersList[answersList.length - 1]);
-
-// Variable to keep track of the current color index
-var currentColorIndex = 0;
-
-// Function to update the background color with a transition
-function updateBackgroundColor() {
-  // Set the background color from the JSON array
-  document.body.style.backgroundColor = backgroundColors[currentColorIndex];
-
-  // Increment the color index
-  currentColorIndex = (currentColorIndex + 1) % backgroundColors.length;
-
-  // Set a timer to change the color again after some time, allowing for the transition to complete
-  setTimeout(updateBackgroundColor, 5000); // Change color every 5 seconds (2s for transition + 3s pause)
-}
-
 
 // Attach the notification function to the Yes and No buttons
 document.querySelector('#option1').addEventListener('click', showThinkingNotification);

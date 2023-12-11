@@ -123,6 +123,26 @@
     .button-container {
         margin-top: 20px;
     }
+
+    #loadingMessage {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.5rem;
+    color: #ffffff;
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    z-index: 1000;
+}
+
+.unclickable {
+    pointer-events: none;
+    opacity: 0.6; /* Optional: to give a visual cue that the button is not clickable */
+}
+
+    
 </style>
         
 </head>
@@ -173,12 +193,19 @@
         </div>
 
         <div class="button-container">
-            <button type="submit" onclick="submitForm()">Submit</button>
-            <button type="button" onclick="randomizeAndSubmit()">Randomize and Submit</button>
+            <button id="submitButton" type="submit" onclick="submitForm()">Submit</button>
+            <button id="randomizeButton" type="button" onclick="randomizeAndSubmit()">Randomize and Submit</button>
         </div>
     </form>
 
     <script type="text/javascript">
+
+function disableButtonsAndShowLoading() {
+    document.getElementById('submitButton').classList.add('unclickable');
+    document.getElementById('randomizeButton').classList.add('unclickable');
+    document.getElementById('loadingMessage').style.display = 'block'; // Show the loading message
+}
+
         function getRandomOption(options) {
             const randomIndex = Math.floor(Math.random() * options.length);
             return options[randomIndex];
@@ -195,8 +222,8 @@
             selectors.forEach(selector => {
                 document.getElementById('selector' + selector.id).value = getRandomOption(selector.options);
             });
-    
             document.getElementById('selectionsForm').submit();
+            disableButtonsAndShowLoading()
         }
 
         function submitForm(){
@@ -207,10 +234,14 @@
             document.getElementById("selectionsForm").submit();
             console.log("Form Submitted");
             redirect();
+            disableButtonsAndShowLoading()
         }
         function redirect() {
             window.location.href = "http://localhost:3000/currentPrompt?";
         }
     </script>
+    <div id="loadingMessage" style="display: none;">
+        <p>Loading...</p>
+    </div>
 </body>
 </html>

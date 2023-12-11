@@ -19,6 +19,7 @@
             font-family: 'Merriweather', serif; /* Add a serif font for body text */
             color: #34495e; /* Deep blue color */
             padding-bottom: 100px; /* Height of the button container plus additional space */
+            transition: background-color 2s;
         }
 
         .outer-container {
@@ -283,8 +284,11 @@
                     }
                     console.log("load Page has ran")
                 } else {
+                    // Start cycling colors
+                    updateBackgroundColor();
                     // If the story is not ready, we keep polling.
                     setTimeout(checkForStoryUpdate, 2000); // Check again after 2 seconds.
+                    
                 }
             })
             .catch(error => console.error('Error fetching story status:', error));
@@ -461,6 +465,17 @@
             }
             return options
         }
+
+        function getColorsFromJSON(jsonString) {
+            let item = jsonString.replace('\`\`\`json', "");
+            jsonObject = JSON.parse(item.replace('\`\`\`', ""))
+            const colorKeys = Object.keys(jsonObject).filter(key => key.startsWith('color'));
+            let color = []
+            for (let i = 0; i < colorKeys.length; i++){
+                color.push(`${colorKeys[i].toUpperCase()}: ${jsonObject[colorKeys[i]]}`)
+            }
+            return color
+        }
         function updatePrompt(answersList) {
             // Assuming the entire answersList array is returned and the last item is the current prompt
             const promptContainer = document.querySelector('.current-prompt-container .prompt p');
@@ -535,6 +550,25 @@
          }
      }, 5000);
 }
+
+// Extract only the color values:
+var backgroundColors = getOptionsFromJSON(answersList[answersList.length - 1]);
+
+// Variable to keep track of the current color index
+var currentColorIndex = 0;
+
+// Function to update the background color with a transition
+function updateBackgroundColor() {
+  // Set the background color from the JSON array
+  document.body.style.backgroundColor = backgroundColors[currentColorIndex];
+
+  // Increment the color index
+  currentColorIndex = (currentColorIndex + 1) % backgroundColors.length;
+
+  // Set a timer to change the color again after some time, allowing for the transition to complete
+  setTimeout(updateBackgroundColor, 5000); // Change color every 5 seconds (2s for transition + 3s pause)
+}
+
 
 // Attach the notification function to the Yes and No buttons
 document.querySelector('#option1').addEventListener('click', showThinkingNotification);

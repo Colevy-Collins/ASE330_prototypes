@@ -340,6 +340,8 @@
                 <button id="switchButton" onclick="toggleHistory()">Toggle History</button>
         </div>
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     
     <script>
 
@@ -380,8 +382,39 @@
         function handleButtonClick() {
             if (answersList.length > 1) {
                 goBackState();
+                checkForStoryUpdate();
              } 
         }
+
+            // Function to handle the AJAX request
+    function fetchData() {
+        $.ajax({
+            url: '/api/notification',
+            method: 'GET',
+            success: function (data) {
+                // Display the notification to the user
+                if (data.message) {
+                    alert(data.message);
+                }
+            },
+            error: function (error) {
+                console.error('Error fetching data:', error);
+            }
+        });
+    }
+
+    // Function to periodically check for notifications
+    function checkForNotifications() {
+        // Adjust the interval (in milliseconds) based on your needs
+        setInterval(function () {
+            fetchData();
+        }, 5000); // Check every 5 seconds, for example
+    }
+
+    // Call the checkForNotifications function when the page loads
+    $(document).ready(function () {
+        checkForNotifications();
+    });
 
         function toggleHistory(){
             let historicalPromptsDiv = document.getElementById('historical_prompts');

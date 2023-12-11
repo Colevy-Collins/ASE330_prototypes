@@ -124,6 +124,10 @@ app.get('/back', (req, res) => {
         goBack(); // Call goBack function to update currentNode and answersList
         res.json({ answersList })
     }
+    else{
+        const newNotification = { id: notifications.length + 1, message: "There is no previous prompts to go back to" };
+        notifications.push(newNotification);
+    }
 });
 
 // New route to show the full history view
@@ -201,6 +205,23 @@ app.get('/currentStoryStatus', (req, res) => {
         storyReady: !isTraverseStoryRunning,
         latestStorySegment: answersList[answersList.length - 1] // Latest story segment.
     });
+});
+
+// Simulated notifications data
+let notifications = [
+];
+
+// API endpoint to fetch notifications
+app.get('/api/notifications', (req, res) => {
+    // Get the latest notification
+    const latestNotification = notifications.pop();
+
+    // If there is a new notification, send it; otherwise, send an empty response
+    if (latestNotification) {
+        res.json({ message: latestNotification.message });
+    } else {
+        res.json({ message: '' });
+    }
 });
 
 app.listen(3000, async () => {

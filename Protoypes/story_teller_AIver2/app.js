@@ -120,11 +120,9 @@ async function goBack() {
 
 // And update the back button routes:
 app.get('/back', (req, res) => {
-    goBack(); // Call goBack function to update currentNode and answersList
-    if (req.query.view === 'fullHistory') {
-        res.render('fullHistory', { answersList });
-    } else {
-        res.render('currentPrompt', { answersList });
+    if (answersList.length > 1){
+        goBack(); // Call goBack function to update currentNode and answersList
+        res.json({ answersList })
     }
 });
 

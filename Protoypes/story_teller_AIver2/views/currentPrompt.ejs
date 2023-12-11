@@ -333,7 +333,9 @@
 
         <div class="button-group-right">
                 <!-- "Back" button -->
-                    <button id="backButton" type="submit" onclick="redirect(); <% if (answersList.length > 1) { %> goBackState() <% } %>">Back</button>
+                <button id="backButton" type="submit" onclick="handleButtonClick()">Back</button>
+
+
             <!-- "Full History" button -->
                 <button id="switchButton" onclick="toggleHistory()">Toggle History</button>
         </div>
@@ -374,6 +376,13 @@
             historicalPromptsDiv.style.display = (historicalPromptsDiv.style.display === 'none') ? 'block' : 'none';
             outerHistoricalPromptsDiv.style.display = (outerHistoricalPromptsDiv.style.display === 'none') ? 'block' : 'none';
         });
+
+        function handleButtonClick() {
+            if (answersList.length > 1) {
+                goBackState();
+             } 
+        }
+
         function toggleHistory(){
             let historicalPromptsDiv = document.getElementById('historical_prompts');
             let outerHistoricalPromptsDiv = document.getElementById('outer_historical_prompts');

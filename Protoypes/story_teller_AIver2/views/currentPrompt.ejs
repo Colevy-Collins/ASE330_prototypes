@@ -121,21 +121,15 @@
 
         /* Updated button styles with black text and a serif font */
         .buttons {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background-color: #34495e;
-            padding: 15px 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.2);
-            animation: fadeInUpwards 0.6s ease-in-out;
-	    justify-content: space-between;
-            width: calc(100% - 40px); /* Account for padding on the left and right */
-            padding: 15px 20px; /* Adjust padding for natural side alignment */
-            
+        /* Remove the fixed and bottom properties */
+        background-color: #34495e;
+        padding: 15px 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.2);
+        animation: fadeInUpwards 0.6s ease-in-out;
+        padding: 15px 20px; /* Adjust padding for natural side alignment */
         }
 	#backButton {
             margin: 0 15px;
@@ -258,6 +252,27 @@
             box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.15);
         }
 
+        .top-navbar {
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.top-left-button {
+  margin-left: 20px;
+  /* Other styles remain unchanged */
+}
+
+.top-right-button {
+  margin-right: 20px;
+  /* Other styles remain unchanged */
+}
+
     </style>
     <% item = answersList[answersList.length - 1].replace('\`\`\`json', ""); %>
     <% console.log(item.replace('\`\`\`', "")) %>
@@ -305,6 +320,17 @@
                 </p>
             </div>
         </div>
+        <!-- Buttons section -->
+        <div class="buttons">
+            <!-- "Yes" and "No" buttons -->
+            <% if (1 === 1) { %> <!-- check to "the end text. add later" -->
+                <% for (let i = 1; i <= optionKeys.length; i++) { %>
+                <button class="option_button" id='option<%= i %>' type="submit">
+                <%= i %>
+                </button>
+                <% } %>
+            <% } %>
+            </div>
         <div class="container prompt-container" id="outer_historical_prompts" style="display:none">
             <h2>Prompt History</h2>
             <div id="historical_prompts" style="display:none">
@@ -317,27 +343,11 @@
             <% } %>
             </div>
         </div>
-        
-        <!-- Buttons section -->
-    <div class="buttons">
-        <div class="button-group-left">
-            <!-- "Yes" and "No" buttons -->
-            <% if (1 === 1) { %> <!-- check to "the end text. add later" -->
-            <% for (let i = 1; i <= optionKeys.length; i++) { %>
-                <button class="option_button" id='option<%= i %>' type="submit">
-                    <%= i %>
-                </button>
-            <% } %>
-            <% } %>
-        </div>
 
-        <div class="button-group-right">
-                <!-- "Back" button -->
-                    <button id="backButton" type="submit" onclick="redirect(); <% if (answersList.length > 1) { %> goBackState() <% } %>">Back</button>
-            <!-- "Full History" button -->
-                <button id="switchButton" onclick="toggleHistory()">Toggle History</button>
-        </div>
-    </div>
+    <div class="top-navbar" class="button-group-right">
+        <button id="backButton" class="top-left-button" onclick="redirect(); <% if (answersList.length > 1) { %> goBackState() <% } %>">Back</button>
+        <button id="switchButton" class="top-right-button" onclick="toggleHistory()">Toggle History</button>
+      </div>
     
     <script>
 
